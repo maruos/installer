@@ -13,10 +13,11 @@ so make sure you first back-up any important data!
 EOF
 
 mecho () {
+    # use /bin/echo for portability with the '-n' option on Macs
     if [ $# -gt 1 ] ; then
-        echo "$1" "--> $2"
+        /bin/echo "$1" "--> $2"
     else
-        echo "--> $1"
+        /bin/echo "--> $1"
     fi
 }
 
@@ -81,12 +82,12 @@ check_zip () {
         echo "ERROR"
         cat <<EOF
 
-        Hmm, looks like your installer is a missing a few things.
+    Hmm, looks like your installer is a missing a few things.
 
-        Are you running this install script outside the directory you
-        unzipped Maru in?
+    Are you running this install script outside the directory you
+    unzipped Maru in?
 
-        If that isn't it, please try downloading the installer zip again.
+    If that isn't it, please try downloading the installer zip again.
 
 EOF
         exit 1
