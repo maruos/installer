@@ -1,0 +1,65 @@
+,--,--,--. ,--,--.,--.--.,--.,--. 
+|        |' ,-.  ||  .--'|  ||  | 
+|  |  |  |\ '-'  ||  |   '  ''  ' 
+`--`--`--' `--`--'`--'    `----'  
+
+INSTALLING
+==========
+
+Installing Maru on your device is easy!
+
+Just run the interactive "install" script and follow along.
+
+OS-specific installation instructions:
+
+Mac
+---
+
+Navigate to the unzipped installer folder and double-click the "install" script.
+
+Linux
+-----
+
+Open up a terminal, cd to the unzipped directory, and run the "install.sh" script with:
+
+    $ ./install.sh
+
+
+UNINSTALLING / RESTORING TO FACTORY
+===================================
+
+If you've installed Maru and decided you want to get your device back to the way
+it was, you can re-install your factory image with the following steps:
+
+1. Download and unzip the factory image for the version of Android you would like to restore your device to from https://developers.google.com/android/nexus/images#hammerhead
+
+2. Open up a terminal and add the "adb" and "fastboot" programs from the maru installer directory to your PATH:
+
+    $ export PATH=/path/to/maru-installer:$PATH
+
+Make sure you can access adb and fastboot by trying to run them:
+
+    $ adb
+    $ fastboot
+
+If you get errors then your PATH isn't set up correctly.
+
+3. Reboot your device into recovery mode (ensure it is connected to your computer first):
+
+    $ adb reboot bootloader
+
+4. Navigate to the directory you unzipped the factory images in and run the flash-all script:
+
+    $ ./flash-all.sh
+
+You should now have a fresh factory installation on your device.
+
+
+ISSUES
+======
+
+If you have ANY issues at all (or just want to say hi), please let us know and we'll be happy to help. You can ping us on Twitter at @getmaru or send an email to hello@maruos.com.
+
+We hope you enjoy using Maru!
+
+- Team Maru
