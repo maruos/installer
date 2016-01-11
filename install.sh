@@ -1,4 +1,7 @@
 #!/bin/sh -e
+#
+# Copyright (c) 2015 Maru
+#
 
 cat <<EOF
 
@@ -21,6 +24,11 @@ mecho () {
     fi
 }
 
+mexit () {
+    cd - >/dev/null 2>&1
+    exit $1
+}
+
 fatal () {
     cat <<EOF
 
@@ -30,7 +38,7 @@ fatal () {
     and we'll personally walk you through the install process.
 
 EOF
-    exit 1
+    mexit 1
 }
 
 start () {
@@ -63,13 +71,13 @@ check_tools () {
     if [ ! -f "$(which adb)" ] ; then
         mecho "Can't find 'adb'"
         missing_tools
-        exit 1
+        mexit 1
     fi
 
     if [ ! -f "$(which fastboot)" ] ; then
         mecho "Can't find 'fastboot'"
         missing_tools
-        exit 1
+        mexit 1
     fi
     echo "OK"
 
@@ -90,7 +98,7 @@ check_zip () {
     If that isn't it, please try downloading the installer zip again.
 
 EOF
-        exit 1
+        mexit 1
     fi
     echo "OK"
 
@@ -98,9 +106,9 @@ EOF
 }
 
 check_recovery () {
-    mecho -n "Checking that your device is in recovery mode..."
+    mecho -n "Checking whether your device is in recovery mode..."
     if [ "$(./fastboot devices | wc -l)" -eq 0 ] ; then
-        echo "ERROR"
+        echo ""
         return 1
     fi
     echo "OK"
@@ -148,8 +156,6 @@ EOF
         fi
 
         reboot_recovery_manual
-
-        exit 1
     fi
     echo "OK"
 
@@ -201,7 +207,7 @@ flash () {
     fi
 
     # echo "BAIL!"
-    # exit 1
+    # mexit 1
 
     # point of no return!
     mecho "Installing Maru, please keep your device connected..."
@@ -215,8 +221,12 @@ flash () {
     mecho "Rebooting into Maru..."
     ./fastboot reboot >/dev/null 2>&1
 
-    exit 0
+    mexit 0
 }
+
+# enforce same directory as script
+# this allows double-clicking the script to work on mac
+cd "$(dirname $0)"
 
 mecho -n "Are you ready to install Maru? (yes/no): "
 read response
