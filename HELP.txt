@@ -15,7 +15,7 @@ OS-specific installation instructions:
 Mac
 ---
 
-Navigate to the unzipped installer folder and double-click the "install" script.
+Navigate to the unzipped installer folder and double-click "install".
 
 Linux
 -----
@@ -23,6 +23,11 @@ Linux
 Open up a terminal, cd to the unzipped directory, and run the "install.sh" script with:
 
     $ ./install.sh
+
+Windows
+-------
+
+Navigate to the unzipped installer folder and double-click "install".
 
 
 UNINSTALLING / RESTORING TO FACTORY
