@@ -10,14 +10,30 @@ SET /A ERROR_UNLOCK=4
 SET me=%~n0
 SET parent_dir=%~dp0
 
+ECHO.
+ECHO Welcome to the Maru installer!
+ECHO.
+ECHO In order to install Maru you will need to:
+ECHO.
+ECHO 1. Connect your Nexus 5 to your computer over USB
 ECHO. 
-ECHO Welcome to the Maru Installer!
+ECHO 2. Enable USB Debugging on your device:
 ECHO.
-ECHO Before getting started, please ensure your Nexus 5
-ECHO is connected to your computer.
+ECHO    1.  Go to the Settings app and scroll down to
+ECHO        the System section
 ECHO.
-ECHO IMPORTANT: Installing Maru requires a factory reset of your
-ECHO device so make sure you first back-up any important data!
+ECHO        NOTE: If you already have "Developer options" under
+ECHO        System then go directly to #5
+ECHO.
+ECHO    2.  Tap on "About phone"
+ECHO    3.  Tap "Build number" 7 times until you get a message that says
+ECHO        you are now a developer
+ECHO    4.  Go back to the main Settings app
+ECHO    5.  Tap on "Developer options"
+ECHO    6.  Ensure that "USB debugging" is enabled
+ECHO.
+ECHO IMPORTANT: Installing Maru requires a factory reset of your device
+ECHO so make sure you first back-up any important data!
 ECHO.
 
 SET /P confirm="Are you ready to install Maru? (yes/no): "
@@ -57,22 +73,16 @@ ECHO Rebooting your device into recovery mode...
 adb reboot bootloader > NUL 2>&1
 IF /I "%ERRORLEVEL%" NEQ "0" (
     ECHO.
-    ECHO Looks like your device isn't connected or you don't have USB debugging enabled.
+    ECHO Hmm, your device can't be found.
     ECHO.
-    ECHO If you device is connected, please ensure USB debugging is enabled on your device:
+    ECHO Please ensure that:
     ECHO.
-    ECHO 1. Go to the Settings app and scroll down to the System section
+    ECHO 1. Your device is connected to your computer over USB
+    ECHO 2. You have USB Debugging enabled (see above for instructions)
+    ECHO 3. You unlock your device and tap "OK" if you see a dialog asking you
+    ECHO    to allow USB Debugging for your computer's RSA key fingerprint
     ECHO.
-    ECHO     If you already have "Developer options" under System then
-    ECHO      go directly to 5.
-    ECHO.
-    ECHO 2. Tap on "About phone"
-    ECHO 3. Tap "Build number" 7 times until you get the message "Your are now a developer"
-    ECHO 4. Go back to the main Settings app
-    ECHO 5. Tap on "Developer options"
-    ECHO 6. Ensure that "USB Debugging" is enabled
-    ECHO.
-    ECHO Please re-run the installer after you have your device ready.
+    ECHO Go ahead and re-run the installer when you're ready.
     CALL :mexit %ERROR_RECOVERY%
 )
 PING.EXE -n 7 127.0.0.1 > NUL

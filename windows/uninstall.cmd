@@ -46,6 +46,7 @@ adb reboot bootloader
 PING.EXE -n 7 127.0.0.1 > NUL
 flash-all
 
+ECHO Done!
 PAUSE
 POPD
 EXIT /B 0
