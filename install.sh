@@ -16,27 +16,30 @@ In order to install Maru you will need to:
     1)  Go to the Settings app and scroll down to
         the System section
 
-        NOTE: If you already have "Developer options" under
-        System then go directly to #5
+        NOTE: If you already have "Developer options"
+        under System then go directly to #5
 
     2)  Tap on "About phone"
-    3)  Tap "Build number" 7 times until you get a message that says
-        you are now a developer
+    3)  Tap "Build number" 7 times until you get a message
+        that says you are now a developer
     4)  Go back to the main Settings app
     5)  Tap on "Developer options"
     6)  Ensure that "USB debugging" is enabled
+    7)  Tap "OK" if you see a dialog asking you to allow
+        USB Debugging for your computer's RSA key fingerprint
 
 IMPORTANT: Installing Maru requires a factory reset of your device
-so make sure you first back-up any important data!
+(all your personal data will be wiped) so make sure you first
+back-up any important data!
 
 EOF
 
 mecho () {
     # use /bin/echo for portability with the '-n' option on Macs
     if [ $# -gt 1 ] ; then
-        /bin/echo "$1" "--> $2"
+        /bin/echo "$1" "$2"
     else
-        /bin/echo "--> $1"
+        /bin/echo "$1"
     fi
 }
 
@@ -164,12 +167,29 @@ unlock_bootloader () {
     echo "OK"
 }
 
+unlock_reboot_msg () {
+    cat <<EOF
+
+Successfully unlocked bootloader!
+
+Your device will need to reboot before continuing.
+It will factory reset, so this reboot can take a few minutes.
+You will also need to enable USB Debugging again.
+
+Please re-run this script after your device boots up.
+
+EOF
+}
+
 flash () {
     mecho -n "Checking bootloader lock state..."
     local unlock_state="$(./fastboot oem device-info 2>&1 | grep -i "unlocked" | cut -f 4 -d " ")"
     if [ "$unlock_state" = "false" ] ; then
         echo "LOCKED"
         unlock_bootloader
+        unlock_reboot_msg
+        ./fastboot reboot >/dev/null 2>&1
+        mexit 0
     else
         echo "UNLOCKED"
     fi
@@ -178,15 +198,23 @@ flash () {
     # mexit 1
 
     # point of no return!
+    mecho
     mecho "Installing Maru, please keep your device connected..."
     ./fastboot format cache
     ./fastboot flash boot boot.img
     ./fastboot flash system system.img
     ./fastboot flash userdata userdata.img
 
-    mecho "Done!"
+    mecho
+    mecho "Installation complete!"
 
-    mecho "Rebooting into Maru..."
+    cat <<EOF
+
+The first boot will take 2-3 mins as Maru sets up
+your device so please be patient.
+
+Rebooting into Maru...
+EOF
     ./fastboot reboot >/dev/null 2>&1
 
     mexit 0
@@ -198,6 +226,7 @@ cd "$(dirname "$0")"
 
 mecho -n "Are you ready to install Maru? (yes/no): "
 read response
+mecho
 
 if [ "$response" != "yes" ] ; then
     mecho "Aborting installation."

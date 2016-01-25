@@ -22,18 +22,21 @@ ECHO.
 ECHO    1.  Go to the Settings app and scroll down to
 ECHO        the System section
 ECHO.
-ECHO        NOTE: If you already have "Developer options" under
-ECHO        System then go directly to #5
+ECHO        NOTE: If you already have "Developer options"
+ECHO        under System then go directly to #5
 ECHO.
 ECHO    2.  Tap on "About phone"
-ECHO    3.  Tap "Build number" 7 times until you get a message that says
-ECHO        you are now a developer
+ECHO    3.  Tap "Build number" 7 times until you get a message
+ECHO        that says you are now a developer
 ECHO    4.  Go back to the main Settings app
 ECHO    5.  Tap on "Developer options"
 ECHO    6.  Ensure that "USB debugging" is enabled
+ECHO    7.  Tap "OK" if you see a dialog asking you to allow
+ECHO        USB Debugging for your computer's RSA key fingerprint
 ECHO.
 ECHO IMPORTANT: Installing Maru requires a factory reset of your device
-ECHO so make sure you first back-up any important data!
+ECHO (all your personal data will be wiped) so make sure you first
+ECHO back-up any important data!
 ECHO.
 
 SET /P confirm="Are you ready to install Maru? (yes/no): "
@@ -57,7 +60,7 @@ IF /I "%ERRORLEVEL%" NEQ "0" (
     ECHO Are you running this install script outside the directory
     ECHO you unzipped Maru in?
     ECHO.
-    ECHO If that isn't it, please try downloading the installer zip again.
+    ECHO If that isn't it, please try downloading the installer again.
     ECHO.
     CALL :mexit %ERROR_INSTALLER%
 )
@@ -78,7 +81,7 @@ IF /I "%ERRORLEVEL%" NEQ "0" (
     ECHO Please ensure that:
     ECHO.
     ECHO 1. Your device is connected to your computer over USB
-    ECHO 2. You have USB Debugging enabled (see above for instructions)
+    ECHO 2. You have USB Debugging enabled, see above for instructions
     ECHO 3. You unlock your device and tap "OK" if you see a dialog asking you
     ECHO    to allow USB Debugging for your computer's RSA key fingerprint
     ECHO.
@@ -104,7 +107,11 @@ IF /I "%ERRORLEVEL%" EQU "0" (
 ECHO Unlocking bootloader, you will need to confirm this on your device...
 fastboot oem unlock > NUL 2>&1
 CALL :check_unlocked
-IF /I "%ERRORLEVEL%" NEQ "0" (
+IF /I "%ERRORLEVEL%" EQU "0" (
+    CALL :echo_unlock_reboot_msg
+    fastboot reboot > NUL 2>&1
+    CALL :mexit 0
+) ELSE (
     ECHO Failed to unlock bootloader!
     CALL :fatal
     CALL :mexit %ERROR_UNLOCK%
@@ -127,7 +134,12 @@ ECHO Rebooting into Maru...
 fastboot reboot > NUL 2>&1
 
 ECHO.
-ECHO Installation success!
+ECHO Installation complete!
+ECHO.
+ECHO The first boot will take 2-3 mins as Maru sets up
+ECHO your device so please be patient.
+ECHO.
+ECHO Rebooting into Maru...
 CALL :mexit 0
 
 
@@ -167,6 +179,18 @@ EXIT /B 0
 :check_unlocked
 fastboot oem device-info 2>&1 | FINDSTR "unlocked" | FINDSTR "true"
 IF /I "%ERRORLEVEL%" NEQ "0" (EXIT /B 1)
+EXIT /B 0
+
+:echo_unlock_reboot_msg
+ECHO.
+ECHO Successfully unlocked bootloader!
+ECHO.
+ECHO Your device will need to reboot before continuing.
+ECHO It will factory reset, so you will need to enable
+ECHO USB Debugging again.
+ECHO.
+ECHO Please re-run this script after your device boots up.
+ECHO.
 EXIT /B 0
 
 :fatal

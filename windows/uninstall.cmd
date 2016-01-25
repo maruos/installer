@@ -13,7 +13,30 @@ ECHO.
 ECHO This script will ease the process of restoring your
 ECHO device to factory settings.
 ECHO.
-ECHO Please ensure your device is connected to your computer.
+ECHO In order to uninstall Maru you will need to:
+ECHO.
+ECHO 1. Connect your Nexus 5 to your computer over USB
+ECHO. 
+ECHO 2. Enable USB Debugging on your device:
+ECHO.
+ECHO    1.  Go to the Settings app and scroll down to
+ECHO        the System section
+ECHO.
+ECHO        NOTE: If you already have "Developer options"
+ECHO        under System then go directly to #5
+ECHO.
+ECHO    2.  Tap on "About phone"
+ECHO    3.  Tap "Build number" 7 times until you get a message
+ECHO        that says you are now a developer
+ECHO    4.  Go back to the main Settings app
+ECHO    5.  Tap on "Developer options"
+ECHO    6.  Ensure that "USB debugging" is enabled
+ECHO    7.  Tap "OK" if you see a dialog asking you to allow
+ECHO        USB Debugging for your computer's RSA key fingerprint
+ECHO.
+ECHO IMPORTANT: Uninstalling Maru requires a factory reset of your device
+ECHO (all your personal data will be wiped) so make sure you first
+ECHO back-up any important data!
 ECHO.
 
 SET /P confirm="Are you ready to uninstall Maru? (yes/no): "

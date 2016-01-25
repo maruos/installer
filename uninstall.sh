@@ -19,18 +19,21 @@ Before getting started, you will need to:
     1)  Go to the Settings app and scroll down to
         the System section
 
-        NOTE: If you already have "Developer options" under
-        System then go directly to #5
+        NOTE: If you already have "Developer options"
+        under System then go directly to #5
 
     2)  Tap on "About phone"
-    3)  Tap "Build number" 7 times until you get a message that says
-        you are now a developer
+    3)  Tap "Build number" 7 times until you get a message
+        that says you are now a developer
     4)  Go back to the main Settings app
     5)  Tap on "Developer options"
     6)  Ensure that "USB debugging" is enabled
+    7)  Tap "OK" if you see a dialog asking you to allow
+        USB Debugging for your computer's RSA key fingerprint
 
-IMPORTANT: Please make sure you back-up any important data
-before proceeding!
+IMPORTANT: Uninstalling Maru requires a factory reset of your device
+(all your personal data will be wiped) so make sure you first
+back-up any important data!
 
 EOF
 
@@ -64,7 +67,9 @@ cat <<EOF
 
         https://developers.google.com/android/nexus/images?hl=en#hammerhead
 
-    2. Unzip the factory image
+    2. Untar the factory image:
+
+        $ tar xzvf hammerhead-lmy48m-factory-bf3c82fd.tgz
 
     3. Copy-paste the full path to the unzipped directory when prompted.
        It should look something like:
