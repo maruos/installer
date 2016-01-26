@@ -18,7 +18,13 @@ Navigate to the unzipped installer folder and double-click "install".
 Windows
 -------
 
-Navigate to the unzipped installer folder and double-click "install".
+First, install the Google USB Driver to communicate with Nexus devices:
+
+1. Download the driver from http://developer.android.com/sdk/win-usb.html
+
+2. Install the driver following the instructions on http://developer.android.com/tools/extras/oem-usb.html#InstallingDriver
+
+Then navigate to the unzipped installer folder and double-click "install".
 
 Linux
 -----

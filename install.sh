@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 #
 # Copyright (c) 2015 Maru
 #
@@ -64,25 +64,53 @@ start () {
     check_zip
 }
 
+echo_incomplete_zip () {
+    cat <<EOF
+
+Hmm, looks like your installer is a missing a few things.
+
+Are you running this install script outside the directory you
+unzipped Maru in?
+
+If that isn't it, please try downloading the installer again.
+
+EOF
+}
+
 check_zip () {
     mecho -n "Checking for a complete installation zip..."
     if [ ! -f boot.img ] || [ ! -f system.img ] || [ ! -f userdata.img ] ; then
         echo "ERROR"
-        cat <<EOF
-
-    Hmm, looks like your installer is a missing a few things.
-
-    Are you running this install script outside the directory you
-    unzipped Maru in?
-
-    If that isn't it, please try downloading the installer again.
-
-EOF
+        echo_incomplete_zip
         mexit 1
     fi
     echo "OK"
 
     reboot_recovery
+}
+
+echo_permissions_udev () {
+    cat <<EOF
+
+On certain Linux distributions (Ubuntu 14.04 for example),
+you will need to explicitly add permissions to access USB devices:
+
+1. Disconnect your device from USB
+
+2. Run this in a terminal (requires sudo):
+
+    $ wget -q -O - http://source.android.com/source/51-android.rules | sed "s/<username>/$USER/" | sudo tee /etc/udev/rules.d/51-android.rules; sudo udevadm control --reload-rules
+
+3. Re-connect your device over USB and re-run this installer
+
+EOF
+}
+
+check_fastboot () {
+    if [ "$(./fastboot devices | cut -f 1)" = "no permissions" ] ; then
+        return 1
+    fi
+    return 0
 }
 
 check_recovery () {
@@ -95,6 +123,23 @@ check_recovery () {
     return 0
 }
 
+echo_device_not_found () {
+    cat <<EOF
+
+Hmm, your device can't be found.
+
+Please ensure that:
+
+1. Your device is connected to your computer over USB
+2. You have USB Debugging enabled (see above for instructions)
+3. You unlock your device and tap "OK" if you see a dialog asking you
+   to allow USB Debugging for your computer's RSA key fingerprint
+
+Go ahead and re-run the installer when you're ready.
+
+EOF
+}
+
 reboot_recovery () {
     if check_recovery ; then
         flash
@@ -103,30 +148,8 @@ reboot_recovery () {
     mecho -n "Rebooting your device into recovery mode..."
     if ! ./adb reboot bootloader >/dev/null 2>&1 ; then
         echo "ERROR"
-        cat <<EOF
-
-    Hmm, your device can't be found.
-
-    Please ensure that:
-
-    1. Your device is connected to your computer over USB
-    2. You have USB Debugging enabled (see above for instructions)
-    3. You unlock your device and tap "OK" if you see a dialog asking you
-       to allow USB Debugging for your computer's RSA key fingerprint
-
-    Go ahead and re-run the installer when you're ready.
-
-    LINUX USERS
-    -----------
-
-    On certain Linux distributions, you may need to explicitly
-    add permissions to access USB devices. Try running this in a
-    terminal (requires sudo) and re-running the script:
-
-    $ wget -S -O - http://source.android.com/source/51-android.rules | sed "s/<username>/$USER/" | sudo tee >/dev/null /etc/udev/rules.d/51-android.rules; sudo udevadm control --reload-rules
-
-EOF
-    mexit 1
+        echo_device_not_found
+        mexit 1
     fi
     echo "OK"
 
@@ -167,7 +190,7 @@ unlock_bootloader () {
     echo "OK"
 }
 
-unlock_reboot_msg () {
+echo_unlock_reboot () {
     cat <<EOF
 
 Successfully unlocked bootloader!
@@ -181,13 +204,30 @@ Please re-run this script after your device boots up.
 EOF
 }
 
+echo_success () {
+    cat <<EOF
+
+The first boot will take 2-3 mins as Maru sets up
+your device so please be patient.
+
+Rebooting into Maru...
+EOF
+}
+
 flash () {
     mecho -n "Checking bootloader lock state..."
+
+    if ! check_fastboot ; then
+        echo "ERROR"
+        echo_permissions_udev
+        mexit 1
+    fi
+
     local unlock_state="$(./fastboot oem device-info 2>&1 | grep -i "unlocked" | cut -f 4 -d " ")"
     if [ "$unlock_state" = "false" ] ; then
         echo "LOCKED"
         unlock_bootloader
-        unlock_reboot_msg
+        echo_unlock_reboot
         ./fastboot reboot >/dev/null 2>&1
         mexit 0
     else
@@ -208,13 +248,7 @@ flash () {
     mecho
     mecho "Installation complete!"
 
-    cat <<EOF
-
-The first boot will take 2-3 mins as Maru sets up
-your device so please be patient.
-
-Rebooting into Maru...
-EOF
+    echo_success
     ./fastboot reboot >/dev/null 2>&1
 
     mexit 0
