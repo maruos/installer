@@ -29,9 +29,12 @@ Windows
 
 First, install the Google USB Driver to communicate with Nexus devices:
 
-1. Download the driver from http://developer.android.com/sdk/win-usb.html
+1.  Enable USB Debugging on your device (see HOW TO ENABLE USB DEBUGGING below)
 
-2. Install the driver following the instructions on http://developer.android.com/tools/extras/oem-usb.html#InstallingDriver
+2.  Download the driver from http://developer.android.com/sdk/win-usb.html
+
+3.  Install the driver following the instructions on
+    http://developer.android.com/tools/extras/oem-usb.html#InstallingDriver
 
 Then navigate to the unzipped installer folder and double-click "install".
 
@@ -76,6 +79,32 @@ Navigate to the unzipped installer folder and double-click "uninstall".
 You should now have a fresh factory installation on your device.
 
 
+HOW TO ENABLE USB DEBUGGING
+===========================
+
+You'll see instructions to enable USB Debugging as the first step before running our
+installer or uninstaller. Enabling USB Debugging is important because it lets the Maru
+installer talk to your device.
+
+1.  Go to the Settings app and scroll down to the System section
+
+    NOTE: If you already have "Developer options"
+    under System then go directly to #5
+
+2.  Tap on "About phone"
+3.  Tap "Build number" 7 times until you get a message
+    that says you are now a developer
+4.  Go back to the Settings app and scroll down to the System section again
+5.  Tap on "Developer options"
+6.  Ensure that "USB debugging" is enabled
+7.  Tap "OK" if you see a dialog asking you to allow USB Debugging for
+    your computer's RSA key fingerprint (you may have to do this multiple
+    times unless you check "Always allow from this computer")
+
+Remember that you will have to enable USB Debugging again whenever your device factory resets
+(after unlocking your bootloader for example) or completes a fresh install.
+
+
 COMPATIBILITY
 =============
 
@@ -105,7 +134,8 @@ Windows 7
 ISSUES
 ======
 
-If you have ANY issues at all please let us know and we'll be happy to help. You can ping us on Twitter at @getmaru or send an email to hello@maruos.com.
+If you have ANY issues at all please let us know and we'll be happy to help. You can ping us
+on Twitter at @getmaru or send an email to hello@maruos.com.
 
 We hope you enjoy using Maru!
 
