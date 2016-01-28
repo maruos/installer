@@ -15,6 +15,15 @@ Mac
 
 Navigate to the unzipped installer folder and double-click "install".
 
+
+Linux
+-----
+
+Open up a terminal, cd to the unzipped directory, and run the "install.sh" script with:
+
+    $ ./install.sh
+
+
 Windows
 -------
 
@@ -26,12 +35,10 @@ First, install the Google USB Driver to communicate with Nexus devices:
 
 Then navigate to the unzipped installer folder and double-click "install".
 
-Linux
------
-
-Open up a terminal, cd to the unzipped directory, and run the "install.sh" script with:
-
-    $ ./install.sh
+Tip: We have found that installing the Google USB Driver can be very confusing.
+You may need to select the driver for your device multiple times before
+Windows finally installs it correctly. You may also need to wait while Windows
+installs the driver a second time after your device boots into recovery mode.
 
 
 UNINSTALLING / RESTORING TO FACTORY
@@ -40,15 +47,17 @@ UNINSTALLING / RESTORING TO FACTORY
 If you've installed Maru and decided you want to get your device back to the way
 it was, you can easily re-install your factory image with our interactive uninstaller.
 
+Grab a factory image for the Android version you would like from
+https://developers.google.com/android/nexus/images#hammerhead and follow along.
+
+NOTE: You will have to enable USB Debugging again even if you already did so for
+installing Maru. (You must be a pro at this by now!)
+
 Mac
 ---
 
 Navigate to the unzipped installer folder and double-click "uninstall".
 
-Windows
--------
-
-Navigate to the unzipped installer folder and double-click "uninstall".
 
 Linux
 -----
@@ -57,7 +66,40 @@ Open up a terminal, cd to the unzipped directory, and run the "install.sh" scrip
 
     $ ./uninstall.sh
 
+
+Windows
+-------
+
+Navigate to the unzipped installer folder and double-click "uninstall".
+
+
 You should now have a fresh factory installation on your device.
+
+
+COMPATIBILITY
+=============
+
+This installer has been officially tested on the following platforms.
+
+
+Mac
+---
+
+OS X 10.10 Yosemite (experimental -- may freeze keyboard and trackpad)
+OS X 10.11 El Capitan
+
+
+Linux
+-----
+
+Ubuntu 14.04
+
+
+Windows
+-------
+
+Windows XP
+Windows 7
 
 
 ISSUES
