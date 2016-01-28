@@ -195,11 +195,11 @@ echo_unlock_reboot () {
 
 Successfully unlocked bootloader!
 
-Your device will need to reboot before continuing.
-It will factory reset, so this reboot can take a few minutes.
-You will also need to enable USB Debugging again.
+Your device will need to reboot before continuing. It will factory
+reset, so this reboot can take a few minutes longer than usual.
 
-Please re-run this script after your device boots up.
+Please re-run this script after your device completely boots up
+and you have re-enabled USB Debugging.
 
 EOF
 }
