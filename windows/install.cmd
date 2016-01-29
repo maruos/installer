@@ -75,17 +75,7 @@ IF /I "%ERRORLEVEL%" EQU "0" (
 ECHO Rebooting your device into recovery mode...
 adb reboot bootloader > NUL 2>&1
 IF /I "%ERRORLEVEL%" NEQ "0" (
-    ECHO.
-    ECHO Hmm, your device can't be found.
-    ECHO.
-    ECHO Please ensure that:
-    ECHO.
-    ECHO 1. Your device is connected to your computer over USB
-    ECHO 2. You have USB Debugging enabled, see above for instructions
-    ECHO 3. You unlock your device and tap "OK" if you see a dialog asking you
-    ECHO    to allow USB Debugging for your computer's RSA key fingerprint
-    ECHO.
-    ECHO Go ahead and re-run the installer when you're ready.
+    CALL :echo_device_not_found
     CALL :mexit %ERROR_RECOVERY%
 )
 PING.EXE -n 7 127.0.0.1 > NUL
@@ -93,8 +83,8 @@ PING.EXE -n 7 127.0.0.1 > NUL
 ECHO Checking whether your device is in recovery mode...
 CALL :check_recovery
 IF /I "%ERRORLEVEL%" NEQ "0" (
-    ECHO Your device isn't in recovery mode, let's try this the manual way.
-    CALL :manual_recovery
+    CALL :echo_device_not_found
+    CALL :mexit %ERROR_RECOVERY%
 )
 
 :bootloader
@@ -108,7 +98,7 @@ ECHO Unlocking bootloader, you will need to confirm this on your device...
 fastboot oem unlock > NUL 2>&1
 CALL :check_unlocked
 IF /I "%ERRORLEVEL%" EQU "0" (
-    CALL :echo_unlock_reboot_msg
+    CALL :echo_unlock_reboot
     fastboot reboot > NUL 2>&1
     CALL :mexit 0
 ) ELSE (
@@ -130,16 +120,13 @@ fastboot flash system system.img
 fastboot flash userdata userdata.img
 
 ECHO.
-ECHO Rebooting into Maru...
-fastboot reboot > NUL 2>&1
-
-ECHO.
 ECHO Installation complete!
 ECHO.
 ECHO The first boot will take 2-3 mins as Maru sets up
 ECHO your device so please be patient.
 ECHO.
 ECHO Rebooting into Maru...
+fastboot reboot > NUL 2>&1
 CALL :mexit 0
 
 
@@ -181,15 +168,32 @@ fastboot oem device-info 2>&1 | FINDSTR "unlocked" | FINDSTR "true"
 IF /I "%ERRORLEVEL%" NEQ "0" (EXIT /B 1)
 EXIT /B 0
 
-:echo_unlock_reboot_msg
+:echo_device_not_found
+ECHO.
+ECHO Hmm, your device can't be found.
+ECHO.
+ECHO Please ensure that:
+ECHO.
+ECHO 1. Your device is connected to your computer over USB
+ECHO 2. You have USB Debugging enabled, see above for instructions
+ECHO 3. You unlock your device and tap "OK" if you see a dialog asking you
+ECHO    to allow USB Debugging for your computer's RSA key fingerprint
+ECHO 4. You have the Google USB Driver properly installed for your device
+ECHO    as described in HELP.txt (this is the main source of problems on Windows!)
+ECHO.
+ECHO Go ahead and re-run the installer when you're ready.
+ECHO.
+EXIT /B 0
+
+:echo_unlock_reboot
 ECHO.
 ECHO Successfully unlocked bootloader!
 ECHO.
-ECHO Your device will need to reboot before continuing.
-ECHO It will factory reset, so you will need to enable
-ECHO USB Debugging again.
+ECHO Your device will need to reboot before continuing. It will factory
+ECHO reset, so this reboot can take a few minutes longer than usual.
 ECHO.
-ECHO Please re-run this script after your device boots up.
+ECHO Please re-run this script after your device completely boots up
+ECHO and you have re-enabled USB Debugging.
 ECHO.
 EXIT /B 0
 

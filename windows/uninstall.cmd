@@ -51,9 +51,10 @@ ECHO 1. Please download the factory image for the Android version you want:
 ECHO.
 ECHO    https://developers.google.com/android/nexus/images?hl=en#hammerhead
 ECHO.
-ECHO 2. Install 7-Zip and unzip the downloaded factory archive: http://www.7-zip.org/
+ECHO 2. Extract the downloaded factory archive. You may need to install a program
+ECHO	that can extract compressed tar files, like 7-Zip.
 ECHO.
-ECHO 3. Copy-paste the full path to the unzipped directory below.
+ECHO 3. Copy-paste the full path to the extracted directory below.
 ECHO    It should look something like:
 ECHO.
 ECHO    C:\Documents and Settings\John\My Documents\Downloads\hammerhead-lmy48m
