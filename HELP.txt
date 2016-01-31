@@ -13,13 +13,19 @@ Just run the interactive installer script and follow along.
 Mac
 ---
 
-Navigate to the unzipped installer folder and double-click "install".
+Navigate to the unzipped installer folder, right-click (Control + click) "install",
+and select Open.
+
+Tip: Depending on your security settings, you may get a dialog that says
+"install is from an unidentified developer. Are you sure you want to open it?".
+Please select Open. See https://support.apple.com/kb/PH21769?locale=en_US for
+more details. We promise we're not malware :)
 
 
 Linux
 -----
 
-Open up a terminal, cd to the unzipped directory, and run the "install.sh" script with:
+Open a terminal, cd to the unzipped installer, and run the "install.sh" script with:
 
     $ ./install.sh
 
@@ -47,8 +53,9 @@ installs the driver a second time after your device boots into recovery mode.
 UNINSTALLING / RESTORING TO FACTORY
 ===================================
 
-If you've installed Maru and decided you want to get your device back to the way
-it was, you can easily re-install your factory image with our interactive uninstaller.
+If you've installed Maru and decided you want to get your device back to
+the way it was, you can easily re-install your factory image with our
+interactive uninstaller.
 
 Grab a factory image for the Android version you would like from
 https://developers.google.com/android/nexus/images#hammerhead and follow along.
@@ -59,13 +66,19 @@ installing Maru. (You must be a pro at this by now!)
 Mac
 ---
 
-Navigate to the unzipped installer folder and double-click "uninstall".
+Navigate to the unzipped installer folder, right-click (Control + click) "uninstall",
+and select Open.
+
+Tip: Depending on your security settings, you may get a dialog that says
+"uninstall is from an unidentified developer. Are you sure you want to open it?".
+Please select Open. See https://support.apple.com/kb/PH21769?locale=en_US for
+more details. We promise we're not malware :)
 
 
 Linux
 -----
 
-Open up a terminal, cd to the unzipped directory, and run the "install.sh" script with:
+Open a terminal, cd to the unzipped installer, and run the "uninstall.sh" script with:
 
     $ ./uninstall.sh
 
@@ -82,9 +95,9 @@ You should now have a fresh factory installation on your device.
 HOW TO ENABLE USB DEBUGGING
 ===========================
 
-You'll see instructions to enable USB Debugging as the first step before running our
-installer or uninstaller. Enabling USB Debugging is important because it lets the Maru
-installer talk to your device.
+You'll see instructions to enable USB Debugging as the first step before
+running our installer or uninstaller. Enabling USB Debugging is important
+because it lets the Maru installer talk to your device.
 
 1.  Go to the Settings app and scroll down to the System section
 
@@ -101,8 +114,9 @@ installer talk to your device.
     your computer's RSA key fingerprint (you may have to do this multiple
     times unless you check "Always allow from this computer")
 
-Remember that you will have to enable USB Debugging again whenever your device factory resets
-(after unlocking your bootloader for example) or completes a fresh install.
+Remember that you will have to enable USB Debugging again whenever your
+device factory resets (after unlocking your bootloader for example) or
+completes a fresh install.
 
 
 COMPATIBILITY
@@ -134,8 +148,8 @@ Windows 7
 ISSUES
 ======
 
-If you have ANY issues at all please let us know and we'll be happy to help. You can ping us
-on Twitter at @getmaru or send an email to hello@maruos.com.
+If you have ANY issues at all please let us know and we'll be happy to help.
+You can ping us on Twitter at @getmaru or send an email to hello@maruos.com.
 
 We hope you enjoy using Maru!
 
