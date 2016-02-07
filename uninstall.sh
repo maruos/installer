@@ -67,18 +67,18 @@ cat <<EOF
 
         https://developers.google.com/android/nexus/images?hl=en#hammerhead
 
-    2. Untar the factory image:
+    2. Untar the factory image archive:
 
         $ tar xzvf hammerhead-lmy48m-factory-bf3c82fd.tgz
 
-    3. Copy-paste the full path to the unzipped directory when prompted.
+    3. Copy-paste the full path to the extracted directory below.
        It should look something like:
 
         /home/USER/Downloads/hammerhead-lmy48m
 
 EOF
 
-mecho -n "Full path to unzipped factory image directory: "
+mecho -n "Please enter the full path to the factory image directory: "
 read factory_dir
 
 export PATH="$SCRIPT_PATH":"$PATH"
