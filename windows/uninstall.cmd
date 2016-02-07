@@ -57,10 +57,10 @@ ECHO.
 ECHO 3. Copy-paste the full path to the extracted directory below.
 ECHO    It should look something like:
 ECHO.
-ECHO    C:\Documents and Settings\John\My Documents\Downloads\hammerhead-lmy48m
+ECHO    C:\Users\Einstein\Downloads\hammerhead-lmy48m
 ECHO.
 
-SET /P factory_dir="Please enter the full path to the factory image directory: "
+SET /P factory_dir="Please enter the full path to the factory image directory (right-click to paste): "
 ECHO.
 
 SET PATH=%PATH%;%parent_dir%

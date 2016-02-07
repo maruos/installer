@@ -42,6 +42,9 @@ First, install the Google USB Driver to communicate with Nexus devices:
 3.  Install the driver following the instructions on
     http://developer.android.com/tools/extras/oem-usb.html#InstallingDriver
 
+    NOTE: Step 3 for Windows 7 says "Select 'Devices' in the left pane". If you
+    don't see 'Devices', look instead for 'Device Manager'.
+
 Then navigate to the unzipped installer folder and double-click "install".
 
 Tip: We have found that installing the Google USB Driver can be very confusing.
