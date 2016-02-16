@@ -34,9 +34,8 @@ ECHO    6.  Ensure that "USB debugging" is enabled
 ECHO    7.  Tap "OK" if you see a dialog asking you to allow
 ECHO        USB Debugging for your computer's RSA key fingerprint
 ECHO.
-ECHO IMPORTANT: Installing Maru requires a factory reset of your device
-ECHO (all your personal data will be wiped) so make sure you first
-ECHO back-up any important data!
+ECHO WARNING: Installing Maru will wipe all your personal data
+ECHO so make sure you first back-up anything important!
 ECHO.
 
 SET /P confirm="Are you ready to install Maru? (yes/no): "

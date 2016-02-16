@@ -28,9 +28,8 @@ In order to install Maru you will need to:
     7)  Tap "OK" if you see a dialog asking you to allow
         USB Debugging for your computer's RSA key fingerprint
 
-IMPORTANT: Installing Maru requires a factory reset of your device
-(all your personal data will be wiped) so make sure you first
-back-up any important data!
+WARNING: Installing Maru will wipe all your personal data
+so make sure you first back-up anything important!
 
 EOF
 

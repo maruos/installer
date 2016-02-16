@@ -31,9 +31,8 @@ Before getting started, you will need to:
     7)  Tap "OK" if you see a dialog asking you to allow
         USB Debugging for your computer's RSA key fingerprint
 
-IMPORTANT: Uninstalling Maru requires a factory reset of your device
-(all your personal data will be wiped) so make sure you first
-back-up any important data!
+WARNING: Uninstalling Maru will wipe all your personal data
+so make sure you first back-up anything important!
 
 EOF
 
@@ -67,7 +66,7 @@ cat <<EOF
 
         https://developers.google.com/android/nexus/images?hl=en#hammerhead
 
-    2. Untar the factory image archive:
+    2. Untar the factory image archive (change the file name to match the version you downloaded):
 
         $ tar xzvf hammerhead-lmy48m-factory-bf3c82fd.tgz
 
