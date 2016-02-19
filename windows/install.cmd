@@ -116,7 +116,7 @@ ECHO Installing Maru, please keep your device connected...
 fastboot format cache
 fastboot flash boot boot.img
 fastboot flash system system.img
-fastboot flash userdata userdata.img
+fastboot format userdata
 
 ECHO.
 ECHO Installation complete!
@@ -134,7 +134,6 @@ CALL :mexit 0
 :check_zip
 IF NOT EXIST "boot.img" EXIT /B 1
 IF NOT EXIST "system.img" EXIT /B 1
-IF NOT EXIST "userdata.img" EXIT /B 1
 EXIT /B 0
 
 :check_recovery

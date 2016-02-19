@@ -78,7 +78,7 @@ EOF
 
 check_zip () {
     mecho -n "Checking for a complete installation zip..."
-    if [ ! -f boot.img ] || [ ! -f system.img ] || [ ! -f userdata.img ] ; then
+    if [ ! -f boot.img ] || [ ! -f system.img ] ; then
         echo "ERROR"
         echo_incomplete_zip
         mexit 1
@@ -242,7 +242,7 @@ flash () {
     ./fastboot format cache
     ./fastboot flash boot boot.img
     ./fastboot flash system system.img
-    ./fastboot flash userdata userdata.img
+    ./fastboot format userdata
 
     mecho
     mecho "Installation complete!"
