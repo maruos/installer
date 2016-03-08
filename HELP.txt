@@ -232,21 +232,25 @@ This installer has been officially tested on the following platforms.
 Mac
 ---
 
-OS X 10.10 Yosemite (experimental -- may freeze keyboard and trackpad)
-OS X 10.11 El Capitan
+64-bit only.
+
+- OS X 10.10 Yosemite (experimental -- may freeze keyboard and trackpad)
+- OS X 10.11 El Capitan
 
 
 Linux
 -----
 
-Ubuntu 14.04
+64-bit only.
+
+- Ubuntu 14.04
 
 
 Windows
 -------
 
-Windows XP
-Windows 7
+- Windows XP
+- Windows 7
 
 
 ISSUES
