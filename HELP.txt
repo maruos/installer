@@ -21,15 +21,14 @@ Before deciding to install Maru on your device, please be aware of the following
 IF YOU ALREADY HAVE A CUSTOM RECOVERY
 -------------------------------------
 
+Update: We now offer a Maru update zip that you can flash with TWRP
+just like any other ROM. Make sure to use the update zip instead of
+the installer so you can keep backups!
+
 Our installer assumes you have a basic stock setup with stock recovery. It will
 format cache and userdata, then flash boot and system. On the Nexus 5, this will
 wipe any back-ups you have made with a custom recovery like TWRP since the Nexus 5
 emulates /sdcard on userdata, so watch out!
-
-You may be able to get around this by manually flashing boot and system and then
-immediately entering your custom recovery and doing a cache wipe and factory reset
-from there. Let us know if you have alternate methods of successfully installing Maru
-so we can add them to our soon-to-be wiki!
 
 
 INSTALLING
@@ -141,8 +140,8 @@ We have had success using the TWRP custom recovery to restore Google apps:
     Or you can try the latest from here (sometimes it doesn't install properly):
     http://opengapps.org/?api=5.1&variant=nano
 
-2.  Download TWRP (we have tested v2.8.7.1) and save it in the same directory you unzipped
-    the Maru installer:
+2.  Download TWRP (we have tested v2.8.7.1 and v3.0.0.0) and save it in the same directory you
+    unzipped the Maru installer:
 
     https://dl.twrp.me/hammerhead/
 
