@@ -6,17 +6,27 @@
 PLEASE READ BEFORE INSTALLING
 =============================
 
-Before deciding to install Maru on your device, please be aware of the following:
+Before deciding to install the Maru beta on your device, please be aware of the
+following:
 
-1.  Installing Maru will wipe all of your personal data so please back up anything important!
+**Installing Maru will wipe all of your personal data so please back up anything
+important!**
 
-2.  Installing new versions of Maru may require you to go through this process again,
-    including backing up anything important. Since Maru is in beta, we may be releasing
-    frequent minor updates. If you use your Nexus 5 as your primary phone, you may want
-    to wait until Maru is out of beta and we have a stable public version.
+You can back up important stuff like photos/videos/text messages/call logs
+somewhere off of your device, like your PC or the cloud. There are several apps
+available from the Play store that can help you with this--just search "backup".
 
-3.  Our installer assumes you have a stock Nexus 5
+If you use a custom recovery that supports backups like TWRP, make sure to take
+a complete device backup before installing Maru using the update zip.
 
+**Ensure you use the correct installer for your device!**
+
+Right now, Maru only offers builds for the Nexus 5 (codename: hammerhead).
+Please do not try to run the hammerhead installers on other devices!
+
+**DISCLAIMER**: The Maru OS Project authors will not be held responsible for any
+loss of data or damage to your device. Keep in mind that installing aftermarket
+firmware may void your device's warranty.
 
 IF YOU ALREADY HAVE A CUSTOM RECOVERY
 -------------------------------------
