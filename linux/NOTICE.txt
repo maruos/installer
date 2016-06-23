@@ -1,8 +1,6 @@
-Notices for files contained in the tools directory:
 ============================================================
 Notices for file(s):
-/bin/adb
-/lib64/libadb.a
+adb
 ------------------------------------------------------------
 
    Copyright (c) 2006-2009, The Android Open Source Project
