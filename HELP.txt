@@ -26,22 +26,22 @@ Please do not try to run the hammerhead installers on other devices!
 
 **DISCLAIMER**: The Maru OS Project authors will not be held responsible for any
 loss of data or damage to your device. Keep in mind that installing aftermarket
-firmware may void your device's warranty.
+firmware may void your device's warranty.
 
 IF YOU ALREADY HAVE A CUSTOM RECOVERY
 -------------------------------------
 
+Update: Maru OS now has a standard update zip that you can flash with TWRP just
+like any other ROM--use that instead!
+
 Our installer assumes you have a basic stock setup with stock recovery. It will
 format cache and userdata, then flash boot and system. On the Nexus 5, this will
-wipe any back-ups you have made with a custom recovery like TWRP since the Nexus 5
-emulates /sdcard on userdata, so watch out!
+wipe any back-ups you have made with a custom recovery like TWRP since the Nexus
+5 emulates /sdcard on userdata, so watch out!
 
 You may be able to get around this by manually flashing boot and system and then
-immediately entering your custom recovery and doing a cache wipe and factory reset
-from there.
-
-Update: We are working on a Maru update zip that you can flash with TWRP
-just like any other ROM for future releases and upgrading.
+immediately entering your custom recovery and doing a cache wipe and factory
+reset from there.
 
 
 INSTALLING
@@ -275,11 +275,3 @@ You can ping us on Twitter at @getmaru or send an email to hello@maruos.com.
 We hope you enjoy using Maru!
 
 - Team Maru
-
-
-DISCLAIMER
-==========
-
-Maru and it's team will not be held responsible for any loss of data or damage to your device.
-
-Keep in mind that installing aftermarket firmware may void your device's warranty.
