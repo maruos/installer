@@ -147,11 +147,7 @@ We have had success using the TWRP custom recovery to restore Google apps:
 1.  Download Play apps from a 3rd party packager like Open Gapps and save it in
     the same directory you unzipped the Maru installer:
 
-    You can use the known good version we tested with here:
-    https://github.com/opengapps/arm/releases/download/20160217/open_gapps-arm-5.1-nano-20160217.zip
-
-    Or you can try the latest from here (sometimes it doesn't install properly):
-    http://opengapps.org/?api=5.1&variant=nano
+    http://opengapps.org/?arch=arm&api=5.1&variant=pico
 
 2.  Download TWRP (we have tested v2.8.7.1 and v3.0.0.0) and save it in the same directory you
     unzipped the Maru installer:
@@ -269,9 +265,11 @@ Windows
 ISSUES
 ======
 
-If you have ANY issues at all please let us know and we'll be happy to help.
-You can ping us on Twitter at @getmaru or send an email to hello@maruos.com.
+Please file any bugs or feature requests as issues on the central Maru OS
+repository:
 
-We hope you enjoy using Maru!
+https://github.com/maruos/maruos
 
-- Team Maru
+You can also find help by explaining your issue in the Maru OS forum:
+
+https://groups.google.com/forum/#!forum/maru-os
