@@ -147,7 +147,7 @@ We have had success using the TWRP custom recovery to restore Google apps:
 1.  Download Play apps from a 3rd party packager like Open Gapps and save it in
     the same directory you unzipped the Maru installer:
 
-    http://opengapps.org/?arch=arm&api=5.1&variant=pico
+    http://opengapps.org/?arch=arm&api=6.0&variant=pico
 
 2.  Download TWRP (we have tested v2.8.7.1 and v3.0.0.0) and save it in the same directory you
     unzipped the Maru installer:
