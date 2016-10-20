@@ -149,8 +149,8 @@ We have had success using the TWRP custom recovery to restore Google apps:
 
     http://opengapps.org/?arch=arm&api=6.0&variant=pico
 
-2.  Download TWRP (we have tested v2.8.7.1 and v3.0.0.0) and save it in the same directory you
-    unzipped the Maru installer:
+2.  Download the latest TWRP for your device and save it in the same directory
+    you unzipped the Maru installer:
 
     https://dl.twrp.me/hammerhead/
 
