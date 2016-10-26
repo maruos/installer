@@ -253,6 +253,7 @@ Linux
 64-bit only.
 
 - Ubuntu 14.04
+- Arch Linux
 
 
 Windows
