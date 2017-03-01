@@ -23,7 +23,7 @@ Welcome to the Maru installer!
 
 In order to install Maru you will need to:
 
-1. Connect your Nexus 5 to your computer over USB
+1. Connect your device to your computer over USB
 
 2. Enable USB Debugging on your device:
 

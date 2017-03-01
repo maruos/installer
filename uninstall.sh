@@ -26,7 +26,7 @@ to factory settings.
 
 Before getting started, you will need to:
 
-1. Connect your Nexus 5 to your computer over USB
+1. Connect your device to your computer over USB
 
 2. Enable USB Debugging on your device:
 
@@ -76,11 +76,11 @@ fi
 
 cat <<EOF
 
-    1. Please download the factory image for the Android version you want:
+    1. Please download your device's factory image for the Android version you want:
 
-        https://developers.google.com/android/nexus/images?hl=en#hammerhead
+        https://developers.google.com/android/images
 
-    2. Untar the factory image archive (change the file name to match the version you downloaded):
+    2. Untar the factory image archive (change the name to match the image you downloaded):
 
         $ tar xzvf hammerhead-lmy48m-factory-bf3c82fd.tgz
 

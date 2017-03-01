@@ -21,8 +21,9 @@ a complete device backup before installing Maru using the update zip.
 
 **Ensure you use the correct installer for your device!**
 
-Right now, Maru only offers builds for the Nexus 5 (codename: hammerhead).
-Please do not try to run the hammerhead installers on other devices!
+Please double-check that the codename in the installer zip matches your device's
+codename. For example, maru-v0.3-installer-hammerhead-windows-6773e9ba.zip is
+only for hammerhead (Nexus 5).
 
 **DISCLAIMER**: The Maru OS Project authors will not be held responsible for any
 loss of data or damage to your device. Keep in mind that installing aftermarket
@@ -101,8 +102,8 @@ If you've installed Maru and decided you want to get your device back to
 the way it was, you can easily re-install your factory image with our
 interactive uninstaller.
 
-Grab a factory image for the Android version you would like from
-https://developers.google.com/android/nexus/images#hammerhead and follow along.
+Grab your device's factory image for the Android version you would like from
+https://developers.google.com/android/images and follow along.
 
 NOTE: You will have to enable USB Debugging again even if you already did so for
 installing Maru. (You must be a pro at this by now!)
@@ -152,7 +153,7 @@ We have had success using the TWRP custom recovery to restore Google apps:
 2.  Download the latest TWRP for your device and save it in the same directory
     you unzipped the Maru installer:
 
-    https://dl.twrp.me/hammerhead/
+    https://twrp.me/Devices/
 
 3.  Connect your device to your computer, enable USB Debugging,
     and follow the instructions below depending on your platform:
