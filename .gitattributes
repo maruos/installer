@@ -1,0 +1,2 @@
+# make sure windows scripts use CRLF endings
+*.cmd text eol=crlf
