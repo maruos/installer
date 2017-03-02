@@ -28,8 +28,8 @@ ECHO Welcome to the Maru installer!
 ECHO.
 ECHO In order to install Maru you will need to:
 ECHO.
-ECHO 1. Connect your Nexus 5 to your computer over USB
-ECHO. 
+ECHO 1. Connect your device to your computer over USB
+ECHO.
 ECHO 2. Enable USB Debugging on your device:
 ECHO.
 ECHO    1.  Go to the Settings app and scroll down to

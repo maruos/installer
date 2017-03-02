@@ -28,8 +28,8 @@ ECHO device to factory settings.
 ECHO.
 ECHO In order to uninstall Maru you will need to:
 ECHO.
-ECHO 1. Connect your Nexus 5 to your computer over USB
-ECHO. 
+ECHO 1. Connect your device to your computer over USB
+ECHO.
 ECHO 2. Enable USB Debugging on your device:
 ECHO.
 ECHO    1.  Go to the Settings app and scroll down to
@@ -59,9 +59,9 @@ IF NOT "%confirm%"=="yes" (
 )
 
 ECHO.
-ECHO 1. Please download the factory image for the Android version you want:
+ECHO 1. Please download your device's factory image for the Android version you want:
 ECHO.
-ECHO    https://developers.google.com/android/nexus/images?hl=en#hammerhead
+ECHO    https://developers.google.com/android/images
 ECHO.
 ECHO 2. Extract the downloaded factory archive. You may need to install a program
 ECHO	that can extract compressed tar files, like 7-Zip.
