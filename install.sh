@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 #
 # Copyright 2015-2016 Preetam J. D'Souza
@@ -16,6 +16,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+set -e
+set -u
 
 cat <<EOF
 
@@ -49,11 +52,7 @@ EOF
 
 mecho () {
     # use /bin/echo for portability with the '-n' option on Macs
-    if [ $# -gt 1 ] ; then
-        /bin/echo "$1" "$2"
-    else
-        /bin/echo "$1"
-    fi
+    /bin/echo "$@"
 }
 
 mexit () {
@@ -64,17 +63,13 @@ mexit () {
 fatal () {
     cat <<EOF
 
-    Yikes, something went wrong with the installation. We're sorry.
+Yikes, something went wrong with the installation. We're sorry.
 
-    Please contact us at hello@maruos.com with the issue you are facing
-    and we'll personally walk you through the install process.
+Please contact us at hello@maruos.com with the issue you are facing and we'll
+personally walk you through the install process.
 
 EOF
     mexit 1
-}
-
-start () {
-    check_zip
 }
 
 echo_incomplete_zip () {
@@ -82,58 +77,11 @@ echo_incomplete_zip () {
 
 Hmm, looks like your installer is a missing a few things.
 
-Are you running this install script outside the directory you
-unzipped Maru in?
+Are you running this install script outside the directory you unzipped Maru in?
 
 If that isn't it, please try downloading the installer again.
 
 EOF
-}
-
-check_zip () {
-    mecho -n "Checking for a complete installation zip..."
-    if [ ! -f boot.img ] || [ ! -f system.img ] ; then
-        echo "ERROR"
-        echo_incomplete_zip
-        mexit 1
-    fi
-    echo "OK"
-
-    reboot_recovery
-}
-
-echo_permissions_udev () {
-    cat <<EOF
-
-On certain Linux distributions (Ubuntu 14.04 for example),
-you will need to explicitly add permissions to access USB devices:
-
-1. Disconnect your device from USB
-
-2. Run this in a terminal (requires sudo):
-
-    $ wget -q -O - http://source.android.com/source/51-android.rules | sed "s/<username>/$USER/" | sudo tee /etc/udev/rules.d/51-android.rules; sudo udevadm control --reload-rules
-
-3. Re-connect your device over USB and re-run this installer
-
-EOF
-}
-
-check_fastboot () {
-    if [ "$(./fastboot devices | cut -f 1)" = "no permissions" ] ; then
-        return 1
-    fi
-    return 0
-}
-
-check_recovery () {
-    mecho -n "Checking whether your device is in recovery mode..."
-    if [ "$(./fastboot devices | wc -l)" -eq 0 ] ; then
-        echo ""
-        return 1
-    fi
-    echo "OK"
-    return 0
 }
 
 echo_device_not_found () {
@@ -153,45 +101,93 @@ Go ahead and re-run the installer when you're ready.
 EOF
 }
 
-reboot_recovery () {
-    if check_recovery ; then
-        flash
-    fi
-
-    mecho -n "Rebooting your device into recovery mode..."
-    if ! ./adb reboot bootloader >/dev/null 2>&1 ; then
-        echo "ERROR"
-        echo_device_not_found
-        mexit 1
-    fi
-    echo "OK"
-
-    sleep 7
-    if ! check_recovery ; then
-        fatal
-    fi
-    flash
-}
-
-reboot_recovery_manual () {
+echo_permissions_udev () {
     cat <<EOF
 
-    OK, let's do this the manual way:
+On certain Linux distributions (Ubuntu 14.04 for example),
+you will need to explicitly add permissions to access USB devices:
 
-    (1) Power off your device
-    (2) Boot into recovery by holding down the Volume Up,
-        Volume Down, and Power buttons on your device for a couple of seconds
+1. Disconnect your device from USB
+
+2. Run this in a terminal (requires sudo):
+
+    $ wget -q -O - http://source.android.com/source/51-android.rules | sed "s/<username>/$USER/" | sudo tee /etc/udev/rules.d/51-android.rules; sudo udevadm control --reload-rules
+
+3. Re-connect your device over USB and re-run this installer
 
 EOF
+}
 
-    mecho -n "Hit [ENTER] when your device has rebooted into recovery mode: "
-    read response
+echo_product_mismatch () {
+    local readonly product="$1"
+    cat <<EOF
 
+Woops, looks like you are using the wrong installer for your device!
 
-    if ! check_recovery ; then
-        fatal
+Please download the correct installer, making sure that your device codename
+($product) is listed in the zip file name.
+
+EOF
+}
+
+echo_unlock_reboot () {
+    cat <<EOF
+
+Successfully unlocked bootloader!
+
+Your device will need to reboot before continuing. It will factory reset, so
+this reboot can take a few minutes longer than usual.
+
+Please re-run this script after your device completely boots up and you have
+re-enabled USB Debugging.
+
+EOF
+}
+
+echo_success () {
+    cat <<EOF
+
+The first boot will take 2-3 mins as Maru sets up your device so please be
+patient.
+
+Rebooting into Maru...
+EOF
+}
+
+check_fastboot () {
+    if [ "$(./fastboot devices | cut -f 1)" = "no permissions" ] ; then
+        return 1
     fi
-    flash
+    return 0
+}
+
+check_is_bootloader () {
+    if [ "$(./fastboot devices | wc -l)" -eq 0 ] ; then
+        return 1
+    fi
+    return 0
+}
+
+fastboot_get_product () {
+    echo "$(./fastboot getvar product 2>&1 | grep -i "product" | cut -f 2 -d " ")"
+}
+
+fastboot_get_lock_state_generic () {
+    local readonly unlocked="$(./fastboot oem device-info 2>&1 | grep -i "unlocked" | cut -f 4 -d " ")"
+    if [ "$unlocked" = true ] ; then
+        echo "unlocked"
+    else
+        echo "locked"
+    fi
+}
+
+fastboot_get_lock_state () {
+    local readonly product="$1"
+    case "$product" in
+        # flo is weird and shows incorrect lock state in oem device-info, so use this workaround
+        flo) echo "$(./fastboot getvar lock_state 2>&1 | uniq | grep -i "lock_state" | cut -f 2 -d " ")" ;;
+        *) echo "$(fastboot_get_lock_state_generic)" ;;
+    esac
 }
 
 unlock_bootloader () {
@@ -203,69 +199,7 @@ unlock_bootloader () {
     echo "OK"
 }
 
-echo_unlock_reboot () {
-    cat <<EOF
-
-Successfully unlocked bootloader!
-
-Your device will need to reboot before continuing. It will factory
-reset, so this reboot can take a few minutes longer than usual.
-
-Please re-run this script after your device completely boots up
-and you have re-enabled USB Debugging.
-
-EOF
-}
-
-echo_success () {
-    cat <<EOF
-
-The first boot will take 2-3 mins as Maru sets up
-your device so please be patient.
-
-Rebooting into Maru...
-EOF
-}
-
-flash () {
-    mecho -n "Checking bootloader lock state..."
-
-    if ! check_fastboot ; then
-        echo "ERROR"
-        echo_permissions_udev
-        mexit 1
-    fi
-
-    local unlock_state="$(./fastboot oem device-info 2>&1 | grep -i "unlocked" | cut -f 4 -d " ")"
-    if [ "$unlock_state" = "false" ] ; then
-        echo "LOCKED"
-        unlock_bootloader
-        echo_unlock_reboot
-        ./fastboot reboot >/dev/null 2>&1
-        mexit 0
-    else
-        echo "UNLOCKED"
-    fi
-
-    # echo "BAIL!"
-    # mexit 1
-
-    # point of no return!
-    mecho
-    mecho "Installing Maru, please keep your device connected..."
-    ./fastboot format cache
-    ./fastboot flash boot boot.img
-    ./fastboot flash system system.img
-    ./fastboot format userdata
-
-    mecho
-    mecho "Installation complete!"
-
-    echo_success
-    ./fastboot reboot >/dev/null 2>&1
-
-    mexit 0
-}
+main () { # avoid global namespace for local variables
 
 # enforce same directory as script
 # this allows double-clicking the script to work on mac
@@ -274,10 +208,84 @@ cd "$(dirname "$0")"
 mecho -n "Are you ready to install Maru? (yes/no): "
 read response
 mecho
-
 if [ "$response" != "yes" ] ; then
     mecho "Aborting installation."
     exit 0
 fi
 
-start
+mecho -n "Checking for a complete installation zip..."
+if [ ! android-info.txt ] || [ ! -f boot.img ] || [ ! -f system.img ] ; then
+    echo "ERROR"
+    echo_incomplete_zip
+    mexit 1
+fi
+echo "OK"
+
+
+if ! check_is_bootloader ; then
+    mecho -n "Rebooting your device into bootloader..."
+    ./adb reboot bootloader >/dev/null 2>&1 || {
+        echo "ERROR"
+        echo_device_not_found
+        mexit 1
+    }
+    echo "OK"
+
+    # wait for the device to reboot into bootloader
+    sleep 7
+fi
+
+if ! check_is_bootloader ; then
+    fatal
+fi
+
+
+if ! check_fastboot ; then
+    echo "ERROR"
+    echo_permissions_udev
+    mexit 1
+fi
+
+mecho -n "Checking that this is the correct installer for your device..."
+local readonly product="$(fastboot_get_product)"
+if ! grep "$product" < android-info.txt &>/dev/null ; then
+    echo "ERROR"
+    echo_product_mismatch "$product"
+    mexit 1
+fi
+echo "OK"
+
+mecho -n "Checking bootloader lock state..."
+local readonly lock_state="$(fastboot_get_lock_state "$product")"
+if [ "$lock_state" = locked ] ; then
+    echo "LOCKED"
+    unlock_bootloader
+    echo_unlock_reboot
+    ./fastboot reboot >/dev/null 2>&1
+    mexit 0
+else
+    echo "UNLOCKED"
+fi
+
+# echo "BAIL!"
+# mexit 1
+
+# point of no return!
+mecho
+mecho "Installing Maru, please keep your device connected..."
+./fastboot format cache
+./fastboot flash boot boot.img
+./fastboot flash system system.img
+./fastboot format userdata
+
+mecho
+mecho "Installation complete!"
+
+echo_success
+./fastboot reboot >/dev/null 2>&1
+
+mexit 0
+
+}
+
+main
