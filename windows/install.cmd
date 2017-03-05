@@ -21,7 +21,7 @@ SET me=%~n0
 SET parent_dir=%~dp0
 
 SET /A ERROR_INSTALLER=1
-SET /A ERROR_RECOVERY=2
+SET /A ERROR_BOOTLOADER=2
 SET /A ERROR_INSTALLER_MISMATCH=4
 SET /A ERROR_UNLOCK=8
 
@@ -79,24 +79,24 @@ IF /I "%ERRORLEVEL%" NEQ "0" (
     CALL :mexit %ERROR_INSTALLER%
 )
 
-CALL :check_recovery
+CALL :check_bootloader
 IF /I "%ERRORLEVEL%" EQU "0" (
     GOTO :bootloader
 )
 
-:recovery_adb
-ECHO Rebooting your device into recovery mode...
+:bootloader_adb
+ECHO Rebooting your device into bootloader...
 adb reboot bootloader > NUL 2>&1
 IF /I "%ERRORLEVEL%" NEQ "0" (
     CALL :echo_device_not_found
-    CALL :mexit %ERROR_RECOVERY%
+    CALL :mexit %ERROR_BOOTLOADER%
 )
 PING.EXE -n 7 127.0.0.1 > NUL
 
-CALL :check_recovery
+CALL :check_bootloader
 IF /I "%ERRORLEVEL%" NEQ "0" (
     CALL :echo_device_not_found
-    CALL :mexit %ERROR_RECOVERY%
+    CALL :mexit %ERROR_BOOTLOADER%
 )
 
 :bootloader
@@ -160,11 +160,11 @@ IF NOT EXIST "boot.img" EXIT /B 1
 IF NOT EXIST "system.img" EXIT /B 1
 EXIT /B 0
 
-:check_recovery
-FOR /F "tokens=* USEBACKQ" %%F IN (`fastboot devices`) DO (
-    SET recovery_check=fastboot devices
+:check_bootloader
+FOR /F "tokens=*" %%G IN ('fastboot devices') DO (
+    SET bootloader_check=true
 )
-IF "%recovery_check%"=="" (EXIT /B 1)
+IF "%bootloader_check%"=="" (EXIT /B 1)
 EXIT /B 0
 
 :fastboot_get_product
