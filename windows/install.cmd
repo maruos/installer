@@ -17,11 +17,13 @@
 ::
 
 SETLOCAL ENABLEEXTENSIONS
-SET /A ERROR_INSTALLER=1
-SET /A ERROR_RECOVERY=2
-SET /A ERROR_UNLOCK=4
 SET me=%~n0
 SET parent_dir=%~dp0
+
+SET /A ERROR_INSTALLER=1
+SET /A ERROR_RECOVERY=2
+SET /A ERROR_INSTALLER_MISMATCH=4
+SET /A ERROR_UNLOCK=8
 
 ECHO.
 ECHO Welcome to the Maru installer!
@@ -77,7 +79,6 @@ IF /I "%ERRORLEVEL%" NEQ "0" (
     CALL :mexit %ERROR_INSTALLER%
 )
 
-ECHO Checking whether your device is in recovery mode...
 CALL :check_recovery
 IF /I "%ERRORLEVEL%" EQU "0" (
     GOTO :bootloader
@@ -92,7 +93,6 @@ IF /I "%ERRORLEVEL%" NEQ "0" (
 )
 PING.EXE -n 7 127.0.0.1 > NUL
 
-ECHO Checking whether your device is in recovery mode...
 CALL :check_recovery
 IF /I "%ERRORLEVEL%" NEQ "0" (
     CALL :echo_device_not_found
@@ -100,15 +100,25 @@ IF /I "%ERRORLEVEL%" NEQ "0" (
 )
 
 :bootloader
+ECHO Checking that this is the correct installer for your device...
+(SET product=)
+CALL :fastboot_get_product product
+ECHO   Your device reports itself as "%product%"
+FINDSTR "%product%" android-info.txt > NUL
+IF /I "%ERRORLEVEL%" NEQ "0" (
+    CALL :echo_installer_mismatch
+    CALL :mexit %ERROR_INSTALLER_MISMATCH%
+)
+
 ECHO Checking bootloader lock state...
-CALL :check_unlocked
+CALL :check_unlocked %product%
 IF /I "%ERRORLEVEL%" EQU "0" (
     GOTO :flash
 )
 
 ECHO Unlocking bootloader, you will need to confirm this on your device...
 fastboot oem unlock > NUL 2>&1
-CALL :check_unlocked
+CALL :check_unlocked %product%
 IF /I "%ERRORLEVEL%" EQU "0" (
     CALL :echo_unlock_reboot
     fastboot reboot > NUL 2>&1
@@ -119,11 +129,11 @@ IF /I "%ERRORLEVEL%" EQU "0" (
     CALL :mexit %ERROR_UNLOCK%
 )
 
+:flash
 :: ECHO BAIL!
 :: PAUSE
 :: EXIT /B 0
 
-:flash
 ECHO.
 ECHO Installing Maru, please keep your device connected...
 fastboot format cache
@@ -145,6 +155,7 @@ CALL :mexit 0
 :: functions
 
 :check_zip
+IF NOT EXIST "android-info.txt" EXIT /B 1
 IF NOT EXIST "boot.img" EXIT /B 1
 IF NOT EXIST "system.img" EXIT /B 1
 EXIT /B 0
@@ -156,26 +167,23 @@ FOR /F "tokens=* USEBACKQ" %%F IN (`fastboot devices`) DO (
 IF "%recovery_check%"=="" (EXIT /B 1)
 EXIT /B 0
 
-:manual_recovery
-ECHO.
-ECHO Please reboot your device into recovery mode:
-ECHO.
-ECHO 1. Power off your device
-ECHO 2. Hold down the Volume Up, Volume Down, and Power buttons on your
-ECHO    device for a couple of seconds
-ECHO.
-SET /P ready="Hit ENTER when your device is in recovery mode: "
-ECHO.
-ECHO Checking whether your device is in recovery mode...
-CALL :check_recovery
-IF /I "%ERRORLEVEL%" NEQ "0" (
-    ECHO Your device isn't in recovery mode, please try again.
-    CALL :manual_recovery
+:fastboot_get_product
+FOR /F "tokens=2 delims= " %%G IN (
+    'fastboot getvar product 2^>^&1 ^| FINDSTR "product"'
+) DO (
+    SET %1=%%G
 )
 EXIT /B 0
 
 :check_unlocked
-fastboot oem device-info 2>&1 | FINDSTR "unlocked" | FINDSTR "true"
+SET _device=%1
+IF "%_device%"=="flo" (
+    REM flo shows incorrect lock state in oem device-info, so use this workaround
+    fastboot getvar lock_state 2>&1 | FINDSTR "lock_state" | FINDSTR "unlocked"
+) ELSE (
+    REM this should work for most devices
+    fastboot oem device-info 2>&1 | FINDSTR "unlocked" | FINDSTR "true"
+)
 IF /I "%ERRORLEVEL%" NEQ "0" (EXIT /B 1)
 EXIT /B 0
 
@@ -193,6 +201,15 @@ ECHO 4. You have the Google USB Driver properly installed for your device
 ECHO    as described in HELP.txt (this is the main source of problems on Windows!)
 ECHO.
 ECHO Go ahead and re-run the installer when you're ready.
+ECHO.
+EXIT /B 0
+
+:echo_installer_mismatch
+ECHO.
+ECHO Woops, looks like you are using the wrong installer for your device!
+ECHO.
+ECHO Please download the correct installer, making sure that your device codename
+ECHO is listed in the zip file name.
 ECHO.
 EXIT /B 0
 
