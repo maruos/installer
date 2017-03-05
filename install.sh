@@ -214,7 +214,7 @@ if [ "$response" != "yes" ] ; then
 fi
 
 mecho -n "Checking for a complete installation zip..."
-if [ ! android-info.txt ] || [ ! -f boot.img ] || [ ! -f system.img ] ; then
+if [ ! -f android-info.txt ] || [ ! -f boot.img ] || [ ! -f system.img ] ; then
     echo "ERROR"
     echo_incomplete_zip
     mexit 1
