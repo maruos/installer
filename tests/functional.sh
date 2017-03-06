@@ -177,7 +177,7 @@ setup
 
 techo "abort if incorrect installer for device"
 mock_fastboot "true" "hammerhead" "locked"
-mock_android-info "fakedevice"
+mock_android-info "flo"
 echo "yes" | ./install.sh >/dev/null
 tassert_eq $ERROR_INCORRECT_INSTALLER $?
 
