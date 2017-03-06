@@ -20,6 +20,16 @@
 set -e
 set -u
 
+readonly SUCCESS=0
+readonly SUCCESS_BASE=$(( 1 << 5 ))
+readonly ERROR_BASE=$(( 1 << 6 ))
+readonly SUCCESS_USER_ABORT=$(( SUCCESS_BASE + 1 ))
+readonly SUCCESS_BOOTLOADER_UNLOCKED=$(( SUCCESS_BASE + 2 ))
+readonly ERROR_INCOMPLETE_ZIP=$(( ERROR_BASE + 1 ))
+readonly ERROR_ADB=$(( ERROR_BASE + 2 ))
+readonly ERROR_FASTBOOT_PERMS=$(( ERROR_BASE + 3 ))
+readonly ERROR_INCORRECT_INSTALLER=$(( ERROR_BASE + 4 ))
+
 cat <<EOF
 
 Welcome to the Maru installer!
@@ -118,7 +128,7 @@ you will need to explicitly add permissions to access USB devices:
 EOF
 }
 
-echo_product_mismatch () {
+echo_incorrect_installer() {
     local readonly product="$1"
     cat <<EOF
 
@@ -210,14 +220,14 @@ read response
 mecho
 if [ "$response" != "yes" ] ; then
     mecho "Aborting installation."
-    exit 0
+    mexit $SUCCESS_USER_ABORT
 fi
 
 mecho -n "Checking for a complete installation zip..."
 if [ ! -f android-info.txt ] || [ ! -f boot.img ] || [ ! -f system.img ] ; then
     echo "ERROR"
     echo_incomplete_zip
-    mexit 1
+    mexit $ERROR_INCOMPLETE_ZIP
 fi
 echo "OK"
 
@@ -227,7 +237,7 @@ if ! check_is_bootloader ; then
     ./adb reboot bootloader >/dev/null 2>&1 || {
         echo "ERROR"
         echo_device_not_found
-        mexit 1
+        mexit $ERROR_ADB
     }
     echo "OK"
 
@@ -243,15 +253,15 @@ fi
 if ! check_fastboot ; then
     echo "ERROR"
     echo_permissions_udev
-    mexit 1
+    mexit $ERROR_FASTBOOT_PERMS
 fi
 
 mecho -n "Checking that this is the correct installer for your device..."
 local readonly product="$(fastboot_get_product)"
 if ! grep "$product" < android-info.txt &>/dev/null ; then
     echo "ERROR"
-    echo_product_mismatch "$product"
-    mexit 1
+    echo_incorrect_installer "$product"
+    mexit $ERROR_INCORRECT_INSTALLER
 fi
 echo "OK"
 
@@ -262,7 +272,7 @@ if [ "$lock_state" = locked ] ; then
     unlock_bootloader
     echo_unlock_reboot
     ./fastboot reboot >/dev/null 2>&1
-    mexit 0
+    mexit $SUCCESS_BOOTLOADER_UNLOCKED
 else
     echo "UNLOCKED"
 fi
@@ -284,7 +294,7 @@ mecho "Installation complete!"
 echo_success
 ./fastboot reboot >/dev/null 2>&1
 
-mexit 0
+mexit $SUCCESS
 
 }
 
