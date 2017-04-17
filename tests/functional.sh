@@ -205,4 +205,10 @@ mock_android-info "hammerhead"
 echo "yes" | ./install.sh >/dev/null
 tassert_eq $SUCCESS $?
 
+# misc tests
+
+techo "use a valid URL for wgetting 51-android.rules"
+grep wget <install.sh | tr -d '$' | cut -f 1 -d '|' | bash &>/dev/null
+tassert_eq $SUCCESS $?
+
 texit

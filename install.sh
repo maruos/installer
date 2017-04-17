@@ -121,7 +121,7 @@ you will need to explicitly add permissions to access USB devices:
 
 2. Run this in a terminal (requires sudo):
 
-    $ wget -q -O - http://source.android.com/source/51-android.rules | sed "s/<username>/$USER/" | sudo tee /etc/udev/rules.d/51-android.rules; sudo udevadm control --reload-rules
+    $ wget -S -O - https://source.android.com/source/51-android.txt | sed "s/<username>/$USER/" | sudo tee >/dev/null /etc/udev/rules.d/51-android.rules; sudo udevadm control --reload-rules
 
 3. Re-connect your device over USB and re-run this installer
 
