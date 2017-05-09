@@ -17,15 +17,15 @@ $(DIST_DIR):
 
 linux: $(DIST_DIR)
 	GOOS=$@ GOARCH=amd64 go build $(LDFLAGS)
-	zip $(ZIP_FLAGS) $(ZIP_PREFIX)-$@.zip installer bin/$@/* $(ZIP_ASSETS)
+	zip $(ZIP_FLAGS) $(ZIP_PREFIX)-$@.zip installer prebuilts/$@/* $(ZIP_ASSETS)
 
 darwin: $(DIST_DIR)
 	GOOS=$@ GOARCH=amd64 go build $(LDFLAGS)
-	zip $(ZIP_FLAGS) $(ZIP_PREFIX)-$@.zip installer bin/mac/* $(ZIP_ASSETS)
+	zip $(ZIP_FLAGS) $(ZIP_PREFIX)-$@.zip installer prebuilts/mac/* $(ZIP_ASSETS)
 
 windows: $(DIST_DIR)
 	GOOS=$@ GOARCH=amd64 go build $(LDFLAGS)
-	zip $(ZIP_FLAGS) $(ZIP_PREFIX)-$@.zip installer.exe bin/$@/* $(ZIP_ASSETS)
+	zip $(ZIP_FLAGS) $(ZIP_PREFIX)-$@.zip installer.exe prebuilts/$@/* $(ZIP_ASSETS)
 
 clean:
 	-if [ -f installer ] ; then rm installer; fi
