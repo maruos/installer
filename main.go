@@ -15,10 +15,11 @@ import (
 
 const (
 	// Success exit codes.
-	Success     = 0
 	SuccessBase = 1<<5 + iota
 	SuccessUserAbort
 	SuccessBootloaderUnlocked
+
+	Success = 0
 )
 
 const (

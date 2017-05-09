@@ -21,16 +21,19 @@ set -u
 readonly SCRIPT_DIR="$(dirname "$0")"
 source "${SCRIPT_DIR}/test.sh"
 
-# keep in sync with install.sh
+# keep in sync with exit codes in main.go
 readonly SUCCESS=0
 readonly SUCCESS_BASE=$(( 1 << 5 ))
-readonly ERROR_BASE=$(( 1 << 6 ))
 readonly SUCCESS_USER_ABORT=$(( SUCCESS_BASE + 1 ))
 readonly SUCCESS_BOOTLOADER_UNLOCKED=$(( SUCCESS_BASE + 2 ))
-readonly ERROR_INCOMPLETE_ZIP=$(( ERROR_BASE + 1 ))
-readonly ERROR_ADB=$(( ERROR_BASE + 2 ))
-readonly ERROR_FASTBOOT_PERMS=$(( ERROR_BASE + 3 ))
-readonly ERROR_INCORRECT_INSTALLER=$(( ERROR_BASE + 4 ))
+readonly ERROR_BASE=$(( 1 << 6 ))
+readonly ERROR_PREREQS=$(( ERROR_BASE + 1 ))
+readonly ERROR_USER_INPUT=$(( ERROR_BASE + 2 ))
+readonly ERROR_USB_PERMS=$(( ERROR_BASE + 3 ))
+readonly ERROR_ADB=$(( ERROR_BASE + 4 ))
+readonly ERROR_FASTBOOT=$(( ERROR_BASE + 5 ))
+readonly ERROR_REMOTE=$(( ERROR_BASE + 6 ))
+readonly ERROR_TWRP=$(( ERROR_BASE + 7 ))
 
 mock_fastboot () {
     local readonly in_bootloader="$1"
@@ -113,7 +116,7 @@ case "\$*" in
 esac
 
 case "\$1" in
-    format|flash|reboot|oem)
+    format|flash|reboot|oem|boot)
         exit 0
         ;;
     *)
@@ -130,6 +133,30 @@ mock_adb () {
     cat >adb <<EOF
 #!/bin/bash
 
+case "\$*" in
+    "devices")
+        echo "List of devices attached"
+        echo "01e759d5437df763\tdevice"
+        exit 0
+        ;;
+    "reboot bootloader")
+        exit 0
+        ;;
+esac
+
+case "\$1" in
+    push|shell)
+        sleep 1 # fake work
+        exit 0
+        ;;
+    reboot)
+        exit 0
+        ;;
+    *)
+        exit 1
+        ;;
+esac
+
 if [ "\$*" = "reboot bootloader" ] ; then
     exit 0
 fi
@@ -139,24 +166,14 @@ EOF
     chmod +x adb
 }
 
-mock_android-info () {
-    local readonly board="$1"
-    echo "require board=$board" > android-info.txt
-}
-
 setup () {
-    : > boot.img
-    : > system.img
     mock_adb
 }
 
 teardown () {
     {
-        rm boot.img
-        rm system.img
         rm adb
         rm fastboot
-        rm android-info.txt
     } &>/dev/null
 }
 
@@ -165,50 +182,46 @@ trap teardown EXIT
 echo "Installer should..."
 echo
 
-techo "abort if user answers 'no' to prompt"
-echo "no" | ./install.sh >/dev/null
-tassert_eq $SUCCESS_USER_ABORT $?
-
 techo "abort if missing a complete zip"
-echo "yes" | ./install.sh >/dev/null
-tassert_eq $ERROR_INCOMPLETE_ZIP $?
+echo "yes" | ./installer >/dev/null
+tassert_eq $ERROR_PREREQS $?
 
 setup
 
-techo "abort if incorrect installer for device"
-mock_fastboot "true" "hammerhead" "locked"
-mock_android-info "flo"
-echo "yes" | ./install.sh >/dev/null
-tassert_eq $ERROR_INCORRECT_INSTALLER $?
+techo "abort if user answers 'no' to prompt"
+mock_fastboot "true" "flo" "locked"
+echo "no" | ./installer >/dev/null
+tassert_eq $SUCCESS_USER_ABORT $?
 
 techo "unlock a locked flo"
 mock_fastboot "true" "flo" "locked"
-mock_android-info "flo"
-echo "yes" | ./install.sh >/dev/null
+echo "yes" | ./installer >/dev/null
 tassert_eq $SUCCESS_BOOTLOADER_UNLOCKED $?
 
 techo "unlock a generic locked device"
 mock_fastboot "true" "hammerhead" "locked"
-mock_android-info "hammerhead"
-echo "yes" | ./install.sh >/dev/null
+echo "yes" | ./installer >/dev/null
 tassert_eq $SUCCESS_BOOTLOADER_UNLOCKED $?
+
+techo "abort if installing on an unsupported device"
+mock_fastboot "true" "somefakedevice" "unlocked"
+echo "yes" | ./installer >/dev/null
+tassert_eq $ERROR_REMOTE $?
 
 techo "install succesfully on unlocked flo with workaround"
 mock_fastboot "true" "flo" "unlocked"
-mock_android-info "flo"
-echo "yes" | ./install.sh >/dev/null
+echo "yes" | ./installer >/dev/null
 tassert_eq $SUCCESS $?
 
-techo "install succesfully on a generic unlocked device"
+techo "install succesfully on a supported unlocked device"
 mock_fastboot "true" "hammerhead" "unlocked"
-mock_android-info "hammerhead"
-echo "yes" | ./install.sh >/dev/null
+echo "yes" | ./installer >/dev/null
 tassert_eq $SUCCESS $?
 
 # misc tests
 
 techo "use a valid URL for wgetting 51-android.rules"
-grep wget <install.sh | tr -d '$' | cut -f 1 -d '|' | bash &>/dev/null
+grep wget <strings.go | tr -d '$' | cut -f 1 -d '|' | bash &>/dev/null
 tassert_eq $SUCCESS $?
 
 texit
