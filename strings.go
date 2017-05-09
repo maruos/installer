@@ -42,16 +42,26 @@ Please ensure that:
 3. You unlock your device and tap "OK" if you see a dialog asking you
    to allow USB Debugging for your computer's RSA key fingerprint
 
+If you are on Windows, please ensure you have the Google USB Driver properly
+installed for your device as described in HELP.txt (this is the main source of
+problems on Windows!)
+
 Go ahead and re-run the installer when you're ready.
 `
 const MsgAdbIssue = "\nHmm, there was an issue communicating with your device.\n" + msgFixAdb
 
 const MsgFastbootNoDeviceFound = `
-Hmm, your device can't be found. Please ensure that your device is connected to your computer over USB.
+Hmm, your device can't be found. Please ensure that your device is connected to
+your computer over USB.
 `
 
 const MsgFixPerms = `
 It looks like you are missing some USB permissions.
+
+Please follow the instructions below depending on your platform:
+
+Linux
+-----
 
 On certain Linux distributions (Ubuntu 14.04 for example), you will need to
 explicitly add permissions to access USB devices:
@@ -63,6 +73,13 @@ explicitly add permissions to access USB devices:
    $ wget -S -O - https://source.android.com/source/51-android.txt | sed "s/<username>/$USER/" | sudo tee >/dev/null /etc/udev/rules.d/51-android.rules; sudo udevadm control --reload-rules
 
 3. Re-connect your device over USB and re-run this installer
+
+Windows
+-------
+
+Please ensure you have the Google USB Driver properly installed for your device
+as described in HELP.txt (this is the main source of problems on Windows!)
+
 `
 
 const MsgUnlockSuccess = `
