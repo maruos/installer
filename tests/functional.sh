@@ -183,39 +183,39 @@ echo "Installer should..."
 echo
 
 techo "abort if missing a complete zip"
-echo "yes" | ./installer >/dev/null
+echo "yes" | ./install >/dev/null
 tassert_eq $ERROR_PREREQS $?
 
 setup
 
 techo "abort if user answers 'no' to prompt"
 mock_fastboot "true" "flo" "locked"
-echo "no" | ./installer >/dev/null
+echo "no" | ./install >/dev/null
 tassert_eq $SUCCESS_USER_ABORT $?
 
 techo "unlock a locked flo"
 mock_fastboot "true" "flo" "locked"
-echo "yes" | ./installer >/dev/null
+echo "yes" | ./install >/dev/null
 tassert_eq $SUCCESS_BOOTLOADER_UNLOCKED $?
 
 techo "unlock a generic locked device"
 mock_fastboot "true" "hammerhead" "locked"
-echo "yes" | ./installer >/dev/null
+echo "yes" | ./install >/dev/null
 tassert_eq $SUCCESS_BOOTLOADER_UNLOCKED $?
 
 techo "abort if installing on an unsupported device"
 mock_fastboot "true" "somefakedevice" "unlocked"
-echo "yes" | ./installer >/dev/null
+echo "yes" | ./install >/dev/null
 tassert_eq $ERROR_REMOTE $?
 
 techo "install succesfully on unlocked flo with workaround"
 mock_fastboot "true" "flo" "unlocked"
-echo "yes" | ./installer >/dev/null
+echo "yes" | ./install >/dev/null
 tassert_eq $SUCCESS $?
 
 techo "install succesfully on a supported unlocked device"
 mock_fastboot "true" "hammerhead" "unlocked"
-echo "yes" | ./installer >/dev/null
+echo "yes" | ./install >/dev/null
 tassert_eq $SUCCESS $?
 
 # misc tests

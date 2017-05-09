@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-BINARY=installer
+BINARY=install
 VERSION=$(shell git describe --always --dirty)
 LDFLAGS=-ldflags "-X main.Version=$(VERSION)"
 
@@ -25,28 +25,28 @@ ZIP_FLAGS=-X --junk-paths
 all: linux darwin windows default
 
 default:
-	go build $(LDFLAGS)
+	go build $(LDFLAGS) -o $(BINARY)
 
 $(DIST_DIR):
 	mkdir -p $(DIST_DIR)
 
 linux: $(DIST_DIR)
-	GOOS=$@ GOARCH=amd64 go build $(LDFLAGS)
-	zip $(ZIP_FLAGS) $(ZIP_PREFIX)-$@.zip installer prebuilts/$@/* $(ZIP_ASSETS)
+	GOOS=$@ GOARCH=amd64 go build $(LDFLAGS) -o $(BINARY)
+	zip $(ZIP_FLAGS) $(ZIP_PREFIX)-$@.zip $(BINARY) prebuilts/$@/* $(ZIP_ASSETS)
 
 darwin: $(DIST_DIR)
-	GOOS=$@ GOARCH=amd64 go build $(LDFLAGS)
+	GOOS=$@ GOARCH=amd64 go build $(LDFLAGS) -o $(BINARY)
 	cp prebuilts/linux/uninstall.sh prebuilts/mac/uninstall
-	zip $(ZIP_FLAGS) $(ZIP_PREFIX)-$@.zip installer prebuilts/mac/* $(ZIP_ASSETS)
+	zip $(ZIP_FLAGS) $(ZIP_PREFIX)-$@.zip $(BINARY) prebuilts/mac/* $(ZIP_ASSETS)
 	rm prebuilts/mac/uninstall
 
 windows: $(DIST_DIR)
-	GOOS=$@ GOARCH=amd64 go build $(LDFLAGS)
-	zip $(ZIP_FLAGS) $(ZIP_PREFIX)-$@.zip installer.exe prebuilts/$@/* $(ZIP_ASSETS)
+	GOOS=$@ GOARCH=amd64 go build $(LDFLAGS) -o $(BINARY).exe
+	zip $(ZIP_FLAGS) $(ZIP_PREFIX)-$@.zip $(BINARY).exe prebuilts/$@/* $(ZIP_ASSETS)
 
 clean:
-	-if [ -f installer ] ; then rm installer; fi
-	-if [ -f installer.exe ] ; then rm installer.exe; fi
+	-if [ -f $(BINARY) ] ; then rm $(BINARY); fi
+	-if [ -f $(BINARY).exe ] ; then rm $(BINARY).exe; fi
 	-if [ -d $(DIST_DIR) ] ; then rm -r $(DIST_DIR); fi
 
 .PHONY: default all linux darwin windows

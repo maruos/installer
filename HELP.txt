@@ -1,7 +1,7 @@
-,--,--,--. ,--,--.,--.--.,--.,--. 
-|        |' ,-.  ||  .--'|  ||  | 
-|  |  |  |\ '-'  ||  |   '  ''  ' 
-`--`--`--' `--`--'`--'    `----'  
+,--,--,--. ,--,--.,--.--.,--.,--.
+|        |' ,-.  ||  .--'|  ||  |
+|  |  |  |\ '-'  ||  |   '  ''  '
+`--`--`--' `--`--'`--'    `----'
 
 PLEASE READ BEFORE INSTALLING
 =============================
@@ -19,12 +19,6 @@ available from the Play store that can help you with this--just search "backup".
 If you use a custom recovery that supports backups like TWRP, make sure to take
 a complete device backup before installing Maru using the update zip.
 
-**Ensure you use the correct installer for your device!**
-
-Please double-check that the codename in the installer zip matches your device's
-codename. For example, maru-v0.3-installer-hammerhead-windows-6773e9ba.zip is
-only for hammerhead (Nexus 5).
-
 **DISCLAIMER**: The Maru OS Project authors will not be held responsible for any
 loss of data or damage to your device. Keep in mind that installing aftermarket
 firmware may void your device's warranty.
@@ -32,17 +26,8 @@ firmware may void your device's warranty.
 IF YOU ALREADY HAVE A CUSTOM RECOVERY
 -------------------------------------
 
-Update: Maru OS now has a standard update zip that you can flash with TWRP just
-like any other ROM--use that instead!
-
-Our installer assumes you have a basic stock setup with stock recovery. It will
-format cache and userdata, then flash boot and system. On the Nexus 5, this will
-wipe any back-ups you have made with a custom recovery like TWRP since the Nexus
-5 emulates /sdcard on userdata, so watch out!
-
-You may be able to get around this by manually flashing boot and system and then
-immediately entering your custom recovery and doing a cache wipe and factory
-reset from there.
+Maru OS now has a standard update zip that you can flash with TWRP just
+like any other ROM--use that instead of this installer!
 
 
 INSTALLING
@@ -50,7 +35,7 @@ INSTALLING
 
 Installing Maru on your device is easy!
 
-Just run the interactive installer script and follow along.
+Just run the interactive installer and follow along.
 
 Mac
 ---
@@ -67,9 +52,9 @@ more details. We promise we're not malware :)
 Linux
 -----
 
-Open a terminal, cd to the unzipped installer, and run the "install.sh" script with:
+Open a terminal, cd to the unzipped installer, and run the installer with:
 
-    $ ./install.sh
+    $ ./install
 
 
 Windows
@@ -231,37 +216,6 @@ because it lets the Maru installer talk to your device.
 Remember that you will have to enable USB Debugging again whenever your
 device factory resets (after unlocking your bootloader for example) or
 completes a fresh install.
-
-
-COMPATIBILITY
-=============
-
-This installer has been officially tested on the following platforms.
-
-
-Mac
----
-
-64-bit only.
-
-- OS X 10.10 Yosemite (experimental -- may freeze keyboard and trackpad)
-- OS X 10.11 El Capitan
-
-
-Linux
------
-
-64-bit only.
-
-- Ubuntu 14.04
-- Arch Linux
-
-
-Windows
--------
-
-- Windows XP
-- Windows 7
 
 
 ISSUES
