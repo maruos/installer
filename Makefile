@@ -36,7 +36,9 @@ linux: $(DIST_DIR)
 
 darwin: $(DIST_DIR)
 	GOOS=$@ GOARCH=amd64 go build $(LDFLAGS)
+	cp prebuilts/linux/uninstall.sh prebuilts/mac/uninstall
 	zip $(ZIP_FLAGS) $(ZIP_PREFIX)-$@.zip installer prebuilts/mac/* $(ZIP_ASSETS)
+	rm prebuilts/mac/uninstall
 
 windows: $(DIST_DIR)
 	GOOS=$@ GOARCH=amd64 go build $(LDFLAGS)
