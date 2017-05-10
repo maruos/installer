@@ -1,8 +1,9 @@
 language: go
 
+go: 1.8
+
 install:
-    - go get -v github.com/pdsouza/toolbox.go/net
-    - go get -v github.com/pdsouza/toolbox.go/ui
+    - go get -v ./...
 
 script:
     - make
