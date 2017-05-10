@@ -1,1 +1,8 @@
-script: ./tests/functional.sh
+language: go
+
+install:
+    - go get -v ./...
+
+script:
+    - make
+    - make tests
