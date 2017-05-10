@@ -115,11 +115,6 @@ func exit(code int) {
 }
 
 func main() {
-	myPath, err := os.Executable()
-	if err != nil {
-		panic(err)
-	}
-
 	var versionFlag = flag.Bool("version", false, "print the program version")
 	flag.Parse()
 	if *versionFlag == true {
@@ -127,8 +122,23 @@ func main() {
 		exit(Success)
 	}
 
+	myPath, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+
 	// include any bundled binaries in PATH
-	os.Setenv("PATH", path.Dir(myPath)+":"+os.Getenv("PATH"))
+	err = os.Setenv("PATH", path.Dir(myPath)+":"+os.Getenv("PATH"))
+	if err != nil {
+		eEcho("Failed to set PATH to include installer tools: " + err.Error())
+		exit(ErrorPrereqs)
+	}
+
+	// try to use the installer dir as the workdir to make sure any temporary
+	// files or downloaded dependencies are isolated to the installer dir
+	if err = os.Chdir(path.Dir(myPath)); err != nil {
+		eEcho("Warning: failed to change working directory")
+	}
 
 	adb := android.NewAdbClient()
 	if _, err := adb.Status(); err != nil {
