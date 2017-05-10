@@ -44,9 +44,12 @@ windows: $(DIST_DIR)
 	GOOS=$@ GOARCH=amd64 go build $(LDFLAGS) -o $(BINARY).exe
 	zip $(ZIP_FLAGS) $(ZIP_PREFIX)-$@.zip $(BINARY).exe prebuilts/$@/* $(ZIP_ASSETS)
 
+tests: default
+	./tests/functional.sh
+
 clean:
 	-if [ -f $(BINARY) ] ; then rm $(BINARY); fi
 	-if [ -f $(BINARY).exe ] ; then rm $(BINARY).exe; fi
 	-if [ -d $(DIST_DIR) ] ; then rm -r $(DIST_DIR); fi
 
-.PHONY: default all linux darwin windows
+.PHONY: all default linux darwin windows tests
