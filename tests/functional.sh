@@ -203,8 +203,13 @@ mock_fastboot "true" "hammerhead" "locked"
 echo "yes" | ./install >/dev/null
 tassert_eq $SUCCESS_BOOTLOADER_UNLOCKED $?
 
-techo "abort if installing on an unsupported device"
+techo "abort if using an unsupported device"
 mock_fastboot "true" "somefakedevice" "unlocked"
+echo "yes" | ./install >/dev/null
+tassert_eq $ERROR_REMOTE $?
+
+techo "abort if using an unsupported device with similar name"
+mock_fastboot "true" "hammer" "unlocked"
 echo "yes" | ./install >/dev/null
 tassert_eq $ERROR_REMOTE $?
 

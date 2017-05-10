@@ -65,7 +65,8 @@ func (g *GitHubClient) RequestLatestRelease(device string) (req *net.DownloadReq
 		return nil, err
 	}
 
-	matchString := "update-" + device
+	// Maru releases are tagged as *-update-<device>-*.zip
+	matchString := "-update-" + device + "-"
 	var latestUpdate GAsset
 
 	// Empirically, the GitHub API always returns releases ordered from newest
