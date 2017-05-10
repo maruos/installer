@@ -140,20 +140,6 @@ func main() {
 		eEcho("Warning: failed to change working directory")
 	}
 
-	adb := android.NewAdbClient()
-	if _, err := adb.Status(); err != nil {
-		eEcho("Failed to run adb: " + err.Error())
-		eEcho(MsgIncompleteZip)
-		exit(ErrorPrereqs)
-	}
-
-	fastboot := android.NewFastbootClient()
-	if _, err := fastboot.Status(); err != nil {
-		eEcho("Failed to run fastboot: " + err.Error())
-		eEcho(MsgIncompleteZip)
-		exit(ErrorPrereqs)
-	}
-
 	iEcho(MsgWelcome)
 
 	fmt.Print("Are you ready to install Maru? (yes/no): ")
@@ -170,6 +156,21 @@ func main() {
 	}
 
 	iEcho("")
+	iEcho("Verifying installer tools...")
+	adb := android.NewAdbClient()
+	if _, err := adb.Status(); err != nil {
+		eEcho("Failed to run adb: " + err.Error())
+		eEcho(MsgIncompleteZip)
+		exit(ErrorPrereqs)
+	}
+
+	fastboot := android.NewFastbootClient()
+	if _, err := fastboot.Status(); err != nil {
+		eEcho("Failed to run fastboot: " + err.Error())
+		eEcho(MsgIncompleteZip)
+		exit(ErrorPrereqs)
+	}
+
 	iEcho("Checking USB permissions...")
 	status, _ := fastboot.Status()
 	if status == android.NoDeviceFound {
