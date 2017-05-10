@@ -80,14 +80,14 @@ cat <<EOF
 
         https://developers.google.com/android/images
 
-    2. Untar the factory image archive (change the name to match the image you downloaded):
+    2. Unzip the factory image archive (change the name to match the image you downloaded):
 
-        $ tar xzvf hammerhead-lmy48m-factory-bf3c82fd.tgz
+        $ unzip hammerhead-m4b30z-factory-625c027b.zip
 
     3. Copy-paste the full path to the extracted directory below.
        It should look something like:
 
-        /home/USER/Downloads/hammerhead-lmy48m
+        /home/USER/Downloads/hammerhead-m4b30z
 
 EOF
 

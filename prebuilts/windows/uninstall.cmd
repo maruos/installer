@@ -63,13 +63,12 @@ ECHO 1. Please download your device's factory image for the Android version you 
 ECHO.
 ECHO    https://developers.google.com/android/images
 ECHO.
-ECHO 2. Extract the downloaded factory archive. You may need to install a program
-ECHO	that can extract compressed tar files, like 7-Zip.
+ECHO 2. Extract the downloaded factory archive.
 ECHO.
 ECHO 3. Copy-paste the full path to the extracted directory below.
 ECHO    It should look something like:
 ECHO.
-ECHO    C:\Users\Einstein\Downloads\hammerhead-lmy48m
+ECHO    C:\Users\Einstein\Downloads\hammerhead-m4b30z
 ECHO.
 
 SET /P factory_dir="Please enter the full path to the factory image directory (right-click to paste): "
