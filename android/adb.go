@@ -64,10 +64,10 @@ func (a *AdbClient) Status() (AndroidDeviceStatus, error) {
 	}
 }
 
-func (a *AdbClient) Push(local, remote string) (err error) {
-	output, err := a.Run("push", local, remote)
+func (a *AdbClient) PushFg(local, remote string) (err error) {
+	err = a.RunFg("push", "-p", local, remote)
 	if err != nil {
-		return NewAdbError(output, err)
+		return NewAdbError("", err)
 	}
 	return err
 }

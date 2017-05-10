@@ -17,6 +17,7 @@
 package android
 
 import (
+	"os"
 	"os/exec"
 )
 
@@ -44,4 +45,11 @@ type BinaryAndroidTool struct {
 func (b *BinaryAndroidTool) Run(args ...string) (string, error) {
 	out, err := exec.Command(b.Name, args...).CombinedOutput()
 	return string(out), err
+}
+
+func (b *BinaryAndroidTool) RunFg(args ...string) error {
+	cmd := exec.Command(b.Name, args...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
 }

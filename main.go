@@ -283,8 +283,8 @@ func main() {
 
 	time.Sleep(10000 * time.Millisecond)
 
-	iEcho("Transferring the Maru update zip to your device (may take a few mins)...")
-	if err = adb.Push(zip, "/sdcard"); err != nil {
+	iEcho("Transferring the Maru update zip to your device...")
+	if err = adb.PushFg(zip, "/sdcard"); err != nil {
 		eEcho("Failed to push Maru update zip to device: " + err.Error())
 		exit(ErrorAdb)
 	}
