@@ -121,7 +121,7 @@ you will need to explicitly add permissions to access USB devices:
 
 2. Run this in a terminal (requires sudo):
 
-    $ wget -S -O - https://source.android.com/source/51-android.txt | sed "s/<username>/$USER/" | sudo tee >/dev/null /etc/udev/rules.d/51-android.rules; sudo udevadm control --reload-rules
+    $ wget -S -O - https://github.com/snowdream/51-android/blob/master/51-android.rules | sed "s/<username>/$USER/" | sudo tee >/dev/null /etc/udev/rules.d/51-android.rules; sudo udevadm control --reload-rules
 
 3. Re-connect your device over USB and re-run this installer
 
@@ -183,7 +183,7 @@ fastboot_get_product () {
 }
 
 fastboot_get_lock_state_generic () {
-    local readonly unlocked="$(./fastboot oem device-info 2>&1 | grep -i "unlocked" | cut -f 4 -d " ")"
+    local readonly unlocked="$(./fastboot oem device-info 2>&1 | grep -i "device unlocked" | cut -f 4 -d " ")"
     if [ "$unlocked" = true ] ; then
         echo "unlocked"
     else
@@ -286,7 +286,11 @@ mecho "Installing Maru, please keep your device connected..."
 ./fastboot format cache
 ./fastboot flash boot boot.img
 ./fastboot flash system system.img
-./fastboot format userdata
+if [ ! -f userdata.img ] ; then
+    ./fastboot format userdata
+else
+    ./fastboot flash userdata userdata.img -w
+fi
 
 mecho
 mecho "Installation complete!"
