@@ -1,1 +1,2 @@
-script: ./tests/functional.sh
+script:
+  - ./tests/functional.sh
